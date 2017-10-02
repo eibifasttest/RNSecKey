@@ -95,7 +95,7 @@
 }
 
 + (NSString *)getDeviceName{
-  return [[[UIDevice currentDevice] name] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+  return [[UIDevice currentDevice] name];
 }
 
 + (NSString *)getDeviceVersion{
