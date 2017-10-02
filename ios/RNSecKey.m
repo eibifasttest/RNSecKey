@@ -1,22 +1,12 @@
-//
-//  SecKey.m
-//  RNSecKey
-//
-//  Created by Tan Boon Kiat on 9/28/17.
-//  Copyright © 2017 Facebook. All rights reserved.
-//
-
-#import "SecKey.h"
-#import "CryptoUtil.h"
+#import "RNSecKey.h"
 #import "DeviceUtil.h"
-#import "React/RCTLog.h"
+#import "CryptoUtil.h"
 
-@implementation SecKey
+@implementation RNSecKey
 
-RCT_EXPORT_MODULE();
+RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(generateKey:(RCTResponseSenderBlock)callback)
-{
+RCT_EXPORT_METHOD(generateKey:(RCTResponseSenderBlock)callback){
   NSError *error = (NSError *)[CryptoUtil generateKey];
   
   if(error != nil){
@@ -67,6 +57,5 @@ RCT_EXPORT_METHOD(isEligible:(RCTResponseSenderBlock)callback){
   }
   callback(@[[NSNull null], ret]);
 }
-
 
 @end

@@ -1,22 +1,25 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ /**
+ * @providesModule RNSecKey
  * @flow
  */
+import ReactNative from 'react-native';
 
- import ReactNative from 'react-native';
+const { NativeModules } = ReactNative;
+const NativeRNSecKey = NativeModules.RNSecKey;
 
- const { NativeModules } = ReactNative;
- const SecKey = NativeModules.SecKey;
+/**
+ * High-level docs for the RNSecKey iOS API can be written here.
+ */
 
- export function generateKey(callback) {
-   SecKey.generateKey(callback);
- }
+var RNSecKey = {
+  test: function() {
+    NativeRNSecKey.test();
+  },
+  generateKey: (callback) => NativeRNSecKey.generateKey(callback),
+  getPublicKey: (callback) => NativeRNSecKey.getPublicKey(callback),
+  getSignature: (nonce, callback) => NativeRNSecKey.getSignature(nonce, callback),
 
- export function getPublicKey(callback) {
-   SecKey.getPublicKey(callback);
- }
+};
 
- export function getSignature(nonce, callback) {
-   SecKey.getSignature(nonce, callback);
- }
+export default RNSecKey;
+
