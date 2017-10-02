@@ -16,5 +16,9 @@
 + (BOOL)isLockScreenEnabled;
 + (BOOL)isFingerprintSupported;
 + (BOOL)isFingerprintEnrolled;
++ (NSString *)getDeviceName;
++ (NSString *)getDeviceVersion;
++ (BOOL)isRegisterDeviceToken;
 
 @end
+

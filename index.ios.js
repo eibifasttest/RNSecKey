@@ -18,8 +18,13 @@ var RNSecKey = {
   generateKey: (callback) => NativeRNSecKey.generateKey(callback),
   getPublicKey: (callback) => NativeRNSecKey.getPublicKey(callback),
   getSignature: (nonce, callback) => NativeRNSecKey.getSignature(nonce, callback),
+  removeKeyPair: (callback) => NativeRNSecKey.removeKeyPair(callback),
+  isFingerprintSupported: (callback) => NativeRNSecKey.isFingerprintSupported(callback),
+  isLockScreenEnabled: (callback) => NativeRNSecKey.isLockScreenEnabled(callback),
+  isEligibleForFingerprint: (callback) => NativeRNSecKey.isEligibleForFingerprint(callback),
+  getDeviceName: (callback) => NativeRNSecKey.getDeviceName(callback),
+  getDeviceVersion: (callback) => NativeRNSecKey.getDeviceVersion(callback),
 
 };
 
 export default RNSecKey;
-

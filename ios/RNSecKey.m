@@ -31,6 +31,16 @@ RCT_EXPORT_METHOD(getSignature:(NSString *)nonce callback:(RCTResponseSenderBloc
   callback(@[[NSNull null], signature]);
 }
 
+RCT_EXPORT_METHOD(removeKeyPair:(RCTResponseSenderBlock)callback){
+  OSStatus status = [CryptoUtil removePrivateKey];
+  
+  if(status != 0){
+    callback(@[[NSNumber numberWithInt:status], [NSNull null]]);
+    return;
+  }
+  callback(@[[NSNull null], [NSNull null]]);
+}
+
 RCT_EXPORT_METHOD(isFingerprintSupported:(RCTResponseSenderBlock)callback){
   BOOL isFingerprintSupported = [DeviceUtil isFingerprintSupported];
   callback(@[[NSNull null], [NSNumber numberWithBool:isFingerprintSupported]]);
@@ -46,7 +56,7 @@ RCT_EXPORT_METHOD(isFingerprintEnrolled:(RCTResponseSenderBlock)callback){
   callback(@[[NSNull null], [NSNumber numberWithBool:isFingerprintEnrolled]]);
 }
 
-RCT_EXPORT_METHOD(isEligible:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(isEligibleForFingerprint:(RCTResponseSenderBlock)callback){
   BOOL isFingerprintSupported = [DeviceUtil isFingerprintSupported];
   BOOL isLockScreenEnabled = [DeviceUtil isLockScreenEnabled];
   BOOL isFingerprintEnrolled = [DeviceUtil isFingerprintEnrolled];
@@ -58,4 +68,15 @@ RCT_EXPORT_METHOD(isEligible:(RCTResponseSenderBlock)callback){
   callback(@[[NSNull null], ret]);
 }
 
+RCT_EXPORT_METHOD(getDeviceName:(RCTResponseSenderBlock)callback){
+  NSString *deviceName = [DeviceUtil getDeviceName];
+  callback(@[[NSNull null], deviceName]);
+}
+
+RCT_EXPORT_METHOD(getDeviceVersion:(RCTResponseSenderBlock)callback){
+  NSString *deviceVersion = [DeviceUtil getDeviceVersion];
+  callback(@[[NSNull null], deviceVersion]);
+}
+
 @end
+

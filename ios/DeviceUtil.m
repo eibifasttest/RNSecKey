@@ -7,6 +7,7 @@
 //
 
 #import "DeviceUtil.h"
+#import <UIKit/UIKit.h>
 #include <sys/sysctl.h>
 
 @implementation DeviceUtil
@@ -93,4 +94,18 @@
   return [self canEvaluateLAPolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics LAError:0];
 }
 
++ (NSString *)getDeviceName{
+  return [[[UIDevice currentDevice] name] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+}
+
++ (NSString *)getDeviceVersion{
+  return [[UIDevice currentDevice] systemVersion];
+}
+
++ (BOOL)isRegisterDeviceToken{
+  return [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
+}
+
 @end
+
+
