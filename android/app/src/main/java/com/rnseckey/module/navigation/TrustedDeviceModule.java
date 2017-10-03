@@ -58,7 +58,7 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule implements A
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
     public void getSignature(String nonce, final Callback c){
-        new FingerprintHelper(getReactApplicationContext()).authenticate(nonce, getReactApplicationContext(), new FingerprintAuthenticationDialogFragment.FingerprintListener(){
+        new FingerprintHelper(getReactApplicationContext()).authenticate(nonce, getCurrentActivity(), new FingerprintAuthenticationDialogFragment.FingerprintListener(){
             @Override
             public void onSuccess(String sign) {
                 c.invoke(sign);
@@ -68,11 +68,11 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule implements A
             public void onFail(int code) {
                 if(code == -10){
                     // fingerprint added or locked screen disabled
-                    c.invoke("VOID:"+getDeviceId());
-                    new FingerprintHelper(cordova.getActivity()).clearKey();
+                    c.invoke("VOID:");
+                    new FingerprintHelper(getReactApplicationContext()).clearKey();
 
                 }else if(code == -11){
-                    context.success("CANCEL");
+                    c.invoke("CANCEL");
                 }
             }
         }, null);
