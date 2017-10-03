@@ -1,0 +1,33 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fingerprint_container_with_code"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="8dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/scode_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/scode_desc"
+        android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+        android:textColor="?android:attr/textColorSecondary"/>
+
+    <TextView
+        android:id="@+id/tv_secret_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/fsm_red"
+        android:text="-"
+        android:gravity="center"
+        android:layout_below="@+id/scode_desc"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp" />
+</RelativeLayout>

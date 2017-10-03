@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">RNSecKey</string>
+    <string name="cancel">Cancel</string>
+    <string name="sign_in">Authorize</string>
+    <string name="ok">Ok</string>
+    <string name="fingerprint_block">Too many failed attempts, please request for a new verification code from the website after 30 secs and retry again. You may also switch to SMS OTP or OneyKey OTP to access your account.</string>
+    <string name="fingerprint_description">Please authenticate with your fingerprint to continue</string>
+    <string name="fingerprint_hint">Touch sensor</string>
+    <string name="purchase">Purchase</string>
+    <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
+    <string name="fingerprint_success">Fingerprint recognized</string>
+    <string name="new_fingerprint_enrolled_description">You have recently added / deleted fingerprint from this device. Please re-link your device with FSM to re-enable the feature.</string>
+    <string name="lockscreensettingchange">Lockscreen is disabled or lockscreen setting is changed, to continue using trusted device feature, you need to enable the lockscreen.</string>
+    <string name="use_fingerprint_in_future">Use fingerprint in the future</string>
+    <string name="use_fingerprint_to_authenticate_title">Use fingerprint to authenticate</string>
+    <string name="use_fingerprint_to_authenticate_key">use_fingerprint_to_authenticate_key</string>
+    <string name="title_activity_authenticate">FSMOne Touch</string>
+    <string name="scode_desc">To safeguard your login, please verify the six-digit code shown below.</string>
+    <string name="unusual_fingerprint">We have detected unusual activity with your trusted device. Please re-link your device for security purpose.</string>
+    <string name="not_linked">This device is currently not linked to your FSMOne Account as a trusted device. Proceed to link this device.</string>
+    <string name="swith_to_sg_fingerprint">Please switch country back to SG to use this feature.</string>
+    <string name="nonce_expired">The code has passed its validity period, please request again.</string>
+    <string name="success_authorize">Successfully Authorize.</string>
+    <string name="scode_more">This 2FA key will expire in 60 seconds.\nWe will never ask you for this code if you are not logging in.\nNever share it with anyone.\nAttention: Anyone who links a fingerprint on this device can use this device to login to your account.</string>
+    <string name="scode_detail">1. This device has been linked to your FSMOne account. This page allows you to authenticate your web login via this trusted device.\n\n2. To do so, login from FSMOne Website and choose \"Login with Trusted Device\" as 2FA authentication method.\n\n3. Select the trusted device you wish to authenticate with. A push nofication will be sent to this trusted device and a 6-digit code will be shown on this page.\n\n4. In the event of no push notification being sent, you can proceed to the homepage of FSM Mobile App, click on the top left icon to open this page. A 6-digit code will be shown for you to compare before you proceed to authorize your web login.</string>
+
 </resources>
