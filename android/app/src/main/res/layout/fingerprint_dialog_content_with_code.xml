@@ -24,7 +24,6 @@
         android:layout_height="wrap_content"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@color/fsm_red"
         android:text="-"
         android:gravity="center"
         android:layout_below="@+id/scode_desc"
