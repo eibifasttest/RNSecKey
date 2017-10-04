@@ -1,4 +1,4 @@
-package com.rnseckey.module.navigation;
+package com.rnseckey;
 
 
 import android.app.Activity;
@@ -30,13 +30,10 @@ import java.security.PublicKey;
 import java.util.HashMap;
 
 
-public class TrustedDeviceModule extends ReactContextBaseJavaModule implements ActivityEventListener, LifecycleEventListener {
+public class TrustedDeviceModule extends ReactContextBaseJavaModule {
 
     public TrustedDeviceModule(ReactApplicationContext reactContext){
         super(reactContext);
-        reactContext.addActivityEventListener(this);
-        reactContext.addLifecycleEventListener(this);
-
     }
 
     @Override
@@ -44,16 +41,20 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule implements A
         return "RNSecKey";
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
     public void generateKey(Callback c){
-
+        new FingerprintHelper(getReactApplicationContext()).clearKey();
+        PublicKey key = new FingerprintHelper(getReactApplicationContext()).createKeyPair();
+        String publicKeyString =  Base64.encodeToString(key.getEncoded(),Base64.DEFAULT);
+        c.invoke(null,publicKeyString);
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
     public void getPublicKey(Callback c){
         PublicKey key = new FingerprintHelper(getReactApplicationContext()).createKeyPair();
         String publicKeyString =  Base64.encodeToString(key.getEncoded(),Base64.DEFAULT);
-        c.invoke(publicKeyString);
+        c.invoke(null, publicKeyString);
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
@@ -61,18 +62,18 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule implements A
         new FingerprintHelper(getReactApplicationContext()).authenticate(nonce, getCurrentActivity(), new FingerprintAuthenticationDialogFragment.FingerprintListener(){
             @Override
             public void onSuccess(String sign) {
-                c.invoke(sign);
+                c.invoke(null, sign);
             }
 
             @Override
             public void onFail(int code) {
                 if(code == -10){
                     // fingerprint added or locked screen disabled
-                    c.invoke("VOID:");
+                    c.invoke(-10, "fingerprint added or locked screen disabled");
                     new FingerprintHelper(getReactApplicationContext()).clearKey();
 
                 }else if(code == -11){
-                    c.invoke("CANCEL");
+                    c.invoke(-11, "User cancel");
                 }
             }
         }, null);
@@ -82,11 +83,11 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule implements A
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
     public void isFingerprintSupported(Callback c){
-         c.invoke(new FingerprintHelper(getReactApplicationContext()).hasFingerprintSupport());
+        c.invoke(null, new FingerprintHelper(getReactApplicationContext()).hasFingerprintSupport());
     }
     @ReactMethod
     public void isLockScreenEnabled(Callback c){
-        c.invoke(isLockscreen());
+        c.invoke(null, isLockscreen());
     };
 
     private boolean isLockscreen(){
@@ -101,44 +102,23 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule implements A
     @ReactMethod
     public void isEligibleForFingerprint(Callback c){
         if(!(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1)) {
-            c.invoke(false);
+            c.invoke(null, false);
             return;
         }
         if(!isLockscreen()){
-            c.invoke(false);
+            c.invoke(null, false);
             return;
         }
-        c.invoke(new FingerprintHelper(getReactApplicationContext()).hasEnrolledFingerprints());
+        c.invoke(null, new FingerprintHelper(getReactApplicationContext()).hasEnrolledFingerprints());
 
     };
     @ReactMethod
     public void getDeviceName(Callback c){
-        c.invoke((""+Build.MANUFACTURER).toUpperCase()+" "+android.os.Build.MODEL+"-"+ Build.SERIAL);
+        c.invoke(null, (""+Build.MANUFACTURER).toUpperCase()+" "+android.os.Build.MODEL+"-"+ Build.SERIAL);
     };
     @ReactMethod
-    public void getDeviceVersion(Callback c){};
-    @Override
-    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+    public void getDeviceVersion(Callback c){
+        c.invoke(null, Build.VERSION.SDK_INT);
+    };
 
-    }
-
-    @Override
-    public void onNewIntent(Intent intent) {
-
-    }
-
-    @Override
-    public void onHostResume() {
-
-    }
-
-    @Override
-    public void onHostPause() {
-
-    }
-
-    @Override
-    public void onHostDestroy() {
-
-    }
 }
