@@ -13,7 +13,7 @@
 
 @implementation KeyChainUtil
 
-+ (BOOL) saveToKeychain:(NSString *)data account:(NSString *) account identifier:(NSString *)identifier error:(NSError **) error{
++ (BOOL) saveToKeychain:(NSString *)data account:(NSMutableString *) account identifier:(NSMutableString *)identifier error:(NSError **) error{
   
   if([account length] == 0){
     account = KEYCHAIN_ACCOUNT;
@@ -31,7 +31,7 @@
   return status;
 }
 
-+ (BOOL) removeFromKeychain:(NSString *) account error:(NSError **) error{
++ (BOOL) removeFromKeychain:(NSMutableString *) account identifier:(NSMutableString *)identifier error:(NSError **) error{
   BOOL status = NO;
   if([account length] == 0){
     account = KEYCHAIN_ACCOUNT;
@@ -44,13 +44,13 @@
     [samKeychainQuery setService:DEVICE_ID];
     status = [samKeychainQuery deleteItem:error];
     if(!status && error != nil){
-      NSLog(@"error removing device id to keychain with error code %l", [*error code]);
+      NSLog(@"error removing device id to keychain with error code %ld", [*error code]);
     }
   }
   return status;
 }
 
-+ (NSString *) getFromKeychain:(NSString *)account identifier:(NSString *)identifier{
++ (NSString *) getFromKeychain:(NSMutableString *)account identifier:(NSMutableString *)identifier{
   if([account length] == 0){
     account = KEYCHAIN_ACCOUNT;
   }
