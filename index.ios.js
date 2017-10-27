@@ -24,6 +24,12 @@ var RNSecKey = {
   isEligibleForFingerprint: (callback) => NativeRNSecKey.isEligibleForFingerprint(callback),
   getDeviceName: (callback) => NativeRNSecKey.getDeviceName(callback),
   getDeviceVersion: (callback) => NativeRNSecKey.getDeviceVersion(callback),
+  getDeviceId: (callback) => NativeRNSecKey.getDeviceId(callback),
+  saveDeviceId: (deviceId, callback) => NativeRNSecKey.saveDeviceId(deviceId, callback),
+  removeDeviceId: (callback) => NativeRNSecKey.removeDeviceId(callback),
+  saveToKeychain: (password, account, identifier, callback) => NativeRNSecKey.saveToKeychain(password, account, identifier, callback),
+  getFromKeychain: (account, identifier, callback) => NativeRNSecKey.getFromKeychain(account, identifier, callback),
+  removeFromKeychain: (account, identifier, callback) => NativeRNSecKey.removeFromKeychain(account, identifier, callback),
 
 };
 
