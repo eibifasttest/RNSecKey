@@ -18,7 +18,11 @@
   [samKeychainQuery setAccount:account];
   [samKeychainQuery setService:identifier];
   [samKeychainQuery setPasswordData:[data dataUsingEncoding:NSUTF8StringEncoding]];
-  BOOL status = [samKeychainQuery save:error];
+  NSError *e;
+  BOOL status = [samKeychainQuery save:&e];
+  if(e != nil){
+    *error = e;
+  }
   return status;
 }
 
