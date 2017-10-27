@@ -81,35 +81,48 @@ RCT_EXPORT_METHOD(getDeviceVersion:(RCTResponseSenderBlock)callback){
 
 RCT_EXPORT_METHOD(saveToKeychain:(NSString *) password account:(NSString *) account identifier:(NSString *) identifier callback:(RCTResponseSenderBlock)callback){
   NSError* error;
+  if(password == NULL || account == NULL || identifier == NULL){
+    callback(@[[NSNumber numberWithBool:NO], @"missing password / account / identifier"]);
+    return;
+  }
   BOOL success = [KeyChainUtil saveToKeychain:password account: account identifier:identifier error:&error];
   callback(@[[NSNumber numberWithBool:success], error]);
 }
 
 RCT_EXPORT_METHOD(removeFromKeychain:(NSString *) account identifier:(NSString *) identifier callback:(RCTResponseSenderBlock)callback){
   NSError* error;
+  if(account == NULL || identifier == NULL){
+    callback(@[[NSNumber numberWithBool:NO], @"missing account / identifier"]);
+    return;
+  }
   BOOL success = [KeyChainUtil removeFromKeychain:account identifier:identifier error:&error];
   callback(@[[NSNumber numberWithBool:success], error]);
 }
 
 RCT_EXPORT_METHOD(getFromKeychain:(NSString *) account identifier:(NSString *) identifier callback:(RCTResponseSenderBlock)callback){
+  if(account == NULL || identifier == NULL){
+    callback(@[[NSNumber numberWithBool:NO], @"missing account / identifier"]);
+    return;
+  }
   NSString *password = [KeyChainUtil getFromKeychain:account identifier:identifier];
+  
   callback(@[[NSNull null], password]);
 }
 
 RCT_EXPORT_METHOD(saveDeviceId:(NSString *) deviceId callback:(RCTResponseSenderBlock)callback){
   NSError* error;
-  BOOL success = [KeyChainUtil saveToKeychain:deviceId account: nil identifier:nil error:&error];
+  BOOL success = [KeyChainUtil saveToKeychain:deviceId account: @"" identifier:@"" error:&error];
   callback(@[[NSNumber numberWithBool:success], error]);
 }
 
 RCT_EXPORT_METHOD(removeDeviceId:(RCTResponseSenderBlock)callback){
   NSError* error;
-  BOOL success = [KeyChainUtil removeFromKeychain:nil identifier:nil error:&error];
+  BOOL success = [KeyChainUtil removeFromKeychain:@"" identifier:@"" error:&error];
   callback(@[[NSNumber numberWithBool:success], error]);
 }
 
 RCT_EXPORT_METHOD(getDeviceId:(RCTResponseSenderBlock)callback){
-  NSString *deviceId = [KeyChainUtil getFromKeychain:nil identifier:nil];
+  NSString *deviceId = [KeyChainUtil getFromKeychain:@"" identifier:@""];
   callback(@[[NSNull null], deviceId]);
 }
 
