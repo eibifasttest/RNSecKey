@@ -10,6 +10,10 @@
 		13BE3DEE1AC21097009241FE /* RNSecKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 13BE3DED1AC21097009241FE /* RNSecKey.m */; };
 		AD0BF1001F7FD40300A49DFF /* CryptoUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = AD0BF0FC1F7FD40200A49DFF /* CryptoUtil.m */; };
 		AD0BF1011F7FD40300A49DFF /* SecKeyConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = AD0BF0FE1F7FD40300A49DFF /* SecKeyConstant.m */; };
+		AD54D11E1FA2E945008F49D7 /* KeyChainUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54D11D1FA2E945008F49D7 /* KeyChainUtil.m */; };
+		AD54D12F1FA2EB08008F49D7 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54D12B1FA2EB07008F49D7 /* SAMKeychainQuery.m */; };
+		AD54D1301FA2EB08008F49D7 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54D12E1FA2EB08008F49D7 /* SAMKeychain.m */; };
+		AD54D1331FA2EBE0008F49D7 /* Constant.m in Sources */ = {isa = PBXBuildFile; fileRef = AD54D1321FA2EBE0008F49D7 /* Constant.m */; };
 		ADC698221F7FD3AF00B330D3 /* DeviceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC698211F7FD3AF00B330D3 /* DeviceUtil.m */; };
 /* End PBXBuildFile section */
 
@@ -120,6 +124,14 @@
 		AD0BF0FD1F7FD40300A49DFF /* SecKeyConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecKeyConstant.h; sourceTree = "<group>"; };
 		AD0BF0FE1F7FD40300A49DFF /* SecKeyConstant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecKeyConstant.m; sourceTree = "<group>"; };
 		AD0BF0FF1F7FD40300A49DFF /* CryptoUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CryptoUtil.h; sourceTree = "<group>"; };
+		AD54D11C1FA2E945008F49D7 /* KeyChainUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyChainUtil.h; sourceTree = "<group>"; };
+		AD54D11D1FA2E945008F49D7 /* KeyChainUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyChainUtil.m; sourceTree = "<group>"; };
+		AD54D12B1FA2EB07008F49D7 /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
+		AD54D12C1FA2EB07008F49D7 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
+		AD54D12D1FA2EB08008F49D7 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
+		AD54D12E1FA2EB08008F49D7 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
+		AD54D1311FA2EBE0008F49D7 /* Constant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
+		AD54D1321FA2EBE0008F49D7 /* Constant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Constant.m; sourceTree = "<group>"; };
 		ADC698201F7FD3AF00B330D3 /* DeviceUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceUtil.h; sourceTree = "<group>"; };
 		ADC698211F7FD3AF00B330D3 /* DeviceUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeviceUtil.m; sourceTree = "<group>"; };
 		ADE2BD071F7FEE84004470E5 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
@@ -147,6 +159,10 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				AD54D1311FA2EBE0008F49D7 /* Constant.h */,
+				AD54D1321FA2EBE0008F49D7 /* Constant.m */,
+				AD54D11C1FA2E945008F49D7 /* KeyChainUtil.h */,
+				AD54D11D1FA2E945008F49D7 /* KeyChainUtil.m */,
 				13BE3DEC1AC21097009241FE /* RNSecKey.h */,
 				13BE3DED1AC21097009241FE /* RNSecKey.m */,
 				ADC698201F7FD3AF00B330D3 /* DeviceUtil.h */,
@@ -155,6 +171,10 @@
 				AD0BF0FC1F7FD40200A49DFF /* CryptoUtil.m */,
 				AD0BF0FD1F7FD40300A49DFF /* SecKeyConstant.h */,
 				AD0BF0FE1F7FD40300A49DFF /* SecKeyConstant.m */,
+				AD54D12D1FA2EB08008F49D7 /* SAMKeychain.h */,
+				AD54D12E1FA2EB08008F49D7 /* SAMKeychain.m */,
+				AD54D12C1FA2EB07008F49D7 /* SAMKeychainQuery.h */,
+				AD54D12B1FA2EB07008F49D7 /* SAMKeychainQuery.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				ADE2BD061F7FEE84004470E5 /* Frameworks */,
 			);
@@ -341,8 +361,12 @@
 			files = (
 				AD0BF1001F7FD40300A49DFF /* CryptoUtil.m in Sources */,
 				AD0BF1011F7FD40300A49DFF /* SecKeyConstant.m in Sources */,
+				AD54D12F1FA2EB08008F49D7 /* SAMKeychainQuery.m in Sources */,
+				AD54D11E1FA2E945008F49D7 /* KeyChainUtil.m in Sources */,
 				13BE3DEE1AC21097009241FE /* RNSecKey.m in Sources */,
+				AD54D1301FA2EB08008F49D7 /* SAMKeychain.m in Sources */,
 				ADC698221F7FD3AF00B330D3 /* DeviceUtil.m in Sources */,
+				AD54D1331FA2EBE0008F49D7 /* Constant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,6 +1,7 @@
 #import "RNSecKey.h"
 #import "DeviceUtil.h"
 #import "CryptoUtil.h"
+#import "KeyChainUtil.h"
 
 @implementation RNSecKey
 
@@ -77,6 +78,71 @@ RCT_EXPORT_METHOD(getDeviceVersion:(RCTResponseSenderBlock)callback){
   NSString *deviceVersion = [DeviceUtil getDeviceVersion];
   callback(@[[NSNull null], deviceVersion]);
 }
+
+RCT_EXPORT_METHOD(saveToKeychain:(NSString *) password account:(NSString *) account identifier:(NSString *) identifier callback:(RCTResponseSenderBlock)callback){
+  NSError* error;
+  BOOL success = [KeyChainUtil saveToKeychain:password account: account identifier:identifier error:&error];
+  callback(@[[NSNumber numberWithBool:success], error]);
+}
+
+RCT_EXPORT_METHOD(removeFromKeychain:(NSString *) account identifier:(NSString *) identifier callback:(RCTResponseSenderBlock)callback){
+  NSError* error;
+  BOOL success = [KeyChainUtil removeFromKeychain:account identifier:identifier error:&error];
+  callback(@[[NSNumber numberWithBool:success], error]);
+}
+
+RCT_EXPORT_METHOD(getFromKeychain:(NSString *) account identifier:(NSString *) identifier callback:(RCTResponseSenderBlock)callback){
+  NSString *password = [KeyChainUtil getFromKeychain:account identifier:identifier];
+  callback(@[[NSNull null], password]);
+}
+
+RCT_EXPORT_METHOD(saveDeviceId:(NSString *) deviceId callback:(RCTResponseSenderBlock)callback){
+  NSError* error;
+  BOOL success = [KeyChainUtil saveToKeychain:deviceId account: nil identifier:nil error:&error];
+  callback(@[[NSNumber numberWithBool:success], error]);
+}
+
+RCT_EXPORT_METHOD(removeDeviceId:(RCTResponseSenderBlock)callback){
+  NSError* error;
+  BOOL success = [KeyChainUtil removeFromKeychain:nil identifier:nil error:&error];
+  callback(@[[NSNumber numberWithBool:success], error]);
+}
+
+RCT_EXPORT_METHOD(getDeviceId:(RCTResponseSenderBlock)callback){
+  NSString *deviceId = [KeyChainUtil getFromKeychain:nil identifier:nil];
+  callback(@[[NSNull null], deviceId]);
+}
+
+//RCT_EXPORT_METHOD(getRegistrationData:(RCTResponseSenderBlock)callback){
+//  BOOL isFingerprintSupported = [DeviceUtil isFingerprintSupported];
+//  BOOL isLockScreenEnabled = [DeviceUtil isLockScreenEnabled];
+//  BOOL isFingerprintEnrolled = [DeviceUtil isFingerprintEnrolled];
+//  NSNumber *ret = [NSNumber numberWithBool:NO];
+//
+//  if(isFingerprintSupported && isLockScreenEnabled && isFingerprintEnrolled) {
+//    ret = [NSNumber numberWithBool:YES];
+//  }
+//
+//  if(ret){
+//    NSString* publicKey = [CryptoUtil getPublicKeyString];
+//
+//    if([publicKey length] == 0){
+//      NSError *error = (NSError *)[CryptoUtil generateKey];
+//      if(!error){
+//        publicKey = [CryptoUtil getPublicKeyString];
+//      }
+//    }
+//
+//    NSDictionary *registrationData = @{
+//                                       @"deviceName": [DeviceUtil getDeviceName],
+//                                       @"deviceType": @"ios",
+//                                       @"deviceVersion": [DeviceUtil getDeviceVersion],
+//                                       @"devicePublicKey": publicKey
+//                                       };
+//    callback(@[[NSNumber numberWithBool:ret], registrationData]);
+//  }
+//  callback(@[[NSNumber numberWithBool:ret], [NSNull null]]);
+//}
 
 @end
 
