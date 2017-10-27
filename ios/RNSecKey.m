@@ -111,18 +111,18 @@ RCT_EXPORT_METHOD(getFromKeychain:(NSString *) account identifier:(NSString *) i
 
 RCT_EXPORT_METHOD(saveDeviceId:(NSString *) deviceId callback:(RCTResponseSenderBlock)callback){
   NSError* error;
-  BOOL success = [KeyChainUtil saveToKeychain:deviceId account: @"" identifier:@"" error:&error];
+  BOOL success = [KeyChainUtil saveDeviceId:deviceId error:&error];
   callback(@[[NSNumber numberWithBool:success], error]);
 }
 
 RCT_EXPORT_METHOD(removeDeviceId:(RCTResponseSenderBlock)callback){
   NSError* error;
-  BOOL success = [KeyChainUtil removeFromKeychain:@"" identifier:@"" error:&error];
+  BOOL success = [KeyChainUtil removeDeviceId:&error];
   callback(@[[NSNumber numberWithBool:success], error]);
 }
 
 RCT_EXPORT_METHOD(getDeviceId:(RCTResponseSenderBlock)callback){
-  NSString *deviceId = [KeyChainUtil getFromKeychain:@"" identifier:@""];
+  NSString *deviceId = [KeyChainUtil getDeviceId];
   callback(@[[NSNull null], deviceId]);
 }
 

@@ -14,19 +14,9 @@
 @implementation KeyChainUtil
 
 + (BOOL) saveToKeychain:(NSString *)data account:(NSString *) account identifier:(NSString *)identifier error:(NSError **) error{
-  NSMutableString *acc = [account mutableCopy];;
-  NSMutableString *idty = [identifier mutableCopy];
-  if([account length] == 0){
-    acc = [KEYCHAIN_ACCOUNT mutableCopy];
-  }
-  
-  if([identifier length] == 0){
-    idty = [DEVICE_ID mutableCopy];
-  }
-  
   SAMKeychainQuery *samKeychainQuery = [[SAMKeychainQuery alloc] init];
-  [samKeychainQuery setAccount:acc];
-  [samKeychainQuery setService:idty];
+  [samKeychainQuery setAccount:account];
+  [samKeychainQuery setService:identifier];
   [samKeychainQuery setPasswordData:[data dataUsingEncoding:NSUTF8StringEncoding]];
   BOOL status = [samKeychainQuery save:error];
   return status;
@@ -34,15 +24,6 @@
 
 + (BOOL) removeFromKeychain:(NSString *) account identifier:(NSString *)identifier error:(NSError **) error{
   BOOL status = NO;
-  NSMutableString *acc = [account mutableCopy];;
-  NSMutableString *idty = [identifier mutableCopy];
-  if([account length] == 0){
-    acc = [KEYCHAIN_ACCOUNT mutableCopy];
-  }
-  
-  if([identifier length] == 0){
-    idty = [DEVICE_ID mutableCopy];
-  }
   NSString *deviceId = [SAMKeychain passwordForService:identifier account:account];
   if([deviceId length] != 0){
     NSLog(@"remove device id >>> %@", deviceId);
@@ -58,17 +39,20 @@
 }
 
 + (NSString *) getFromKeychain:(NSString *)account identifier:(NSString *)identifier{
-  NSMutableString *acc = [account mutableCopy];;
-  NSMutableString *idty = [identifier mutableCopy];
-  if([acc length] == 0){
-    acc = [KEYCHAIN_ACCOUNT mutableCopy];
-  }
-  
-  if([idty length] == 0){
-    idty = [DEVICE_ID mutableCopy];
-  }
-  NSString *password = [SAMKeychain passwordForService:idty account:acc];
+  NSString *password = [SAMKeychain passwordForService:identifier account:account];
   return password;
+}
+
++ (BOOL) saveDeviceId:(NSString *)data error:(NSError *__autoreleasing *)error{
+  return [self saveToKeychain:data account:KEYCHAIN_ACCOUNT identifier:DEVICE_ID error:error];
+}
+
++ (BOOL) removeDeviceId:(NSError *__autoreleasing *)error{
+  return [self removeFromKeychain:KEYCHAIN_ACCOUNT identifier:DEVICE_ID error:error];
+}
+
++ (NSString *) getDeviceId{
+  return [self getFromKeychain:KEYCHAIN_ACCOUNT identifier:DEVICE_ID];
 }
 
 @end

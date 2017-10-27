@@ -13,5 +13,8 @@
 + (BOOL) saveToKeychain:(NSString *) data account:(NSString *)account identifier:(NSString *) identifier error:(NSError **) error;
 + (BOOL) removeFromKeychain:(NSString *) account identifier:(NSString *) identifier error:(NSError **) error;
 + (NSString *) getFromKeychain:(NSString *)account identifier:(NSString *)identifier;
++ (BOOL) saveDeviceId:(NSString *)data error:(NSError **)error;
++ (BOOL) removeDeviceId:(NSError **) error;
++ (NSString *)getDeviceId;
 
 @end
