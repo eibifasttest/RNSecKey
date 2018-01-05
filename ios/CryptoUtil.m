@@ -166,9 +166,9 @@
   return nil;
 }
 
-+ (NSString *)getSignature:(NSString *)nonce error:(NSError **)nsError{
++ (NSString *)getSignature:(NSString *)nonce message:(NSString *)message error:(NSError **)nsError{
   NSData *toBeSignedData = [nonce dataUsingEncoding:NSUTF8StringEncoding];
-  SecKeyRef privateKey = [self getPrivateKey:@""];
+  SecKeyRef privateKey = [self getPrivateKey:message];
   NSString *signedNounce = @"";
   if(privateKey != nil){
     NSError *error;

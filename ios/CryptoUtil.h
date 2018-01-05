@@ -15,6 +15,6 @@
 + (NSString *)transformKey:(NSData *)publicKeyData;
 + (OSStatus)removePrivateKey;
 + (NSString *)getPublicKeyString;
-+ (NSString *)getSignature:(NSString *)nonce error:(NSError **)nsError;
++ (NSString *)getSignature:(NSString *)nonce message:(NSString *)message error:(NSError **)nsError;
 + (id)getPublicKey;
 @end

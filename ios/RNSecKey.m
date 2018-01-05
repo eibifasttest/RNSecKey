@@ -21,9 +21,9 @@ RCT_EXPORT_METHOD(getPublicKey:(RCTResponseSenderBlock)callback){
   callback(@[[NSNull null], publicKeyString]);
 }
 
-RCT_EXPORT_METHOD(getSignature:(NSString *)nonce callback:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(getSignature:(NSString *)nonce message:(NSString *) message callback:(RCTResponseSenderBlock)callback){
   NSError *error;
-  NSString *signature = [CryptoUtil getSignature:nonce error:&error];
+  NSString *signature = [CryptoUtil getSignature:nonce message:message error:&error];
   
   if(error != nil){
     callback(@[[NSNumber numberWithInteger:[error code]], signature]);
