@@ -150,7 +150,7 @@ public class FingerprintHelper {
         return null;
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void authenticate(String nonce, Activity context, final FingerprintAuthenticationDialogFragment.FingerprintListener callable, String scode){
+    public void authenticate(String nonce, String message, Activity context, final FingerprintAuthenticationDialogFragment.FingerprintListener callable, String scode){
         mFragment = (FingerprintAuthenticationDialogFragment)Fragment.instantiate(context,FingerprintAuthenticationDialogFragment.class.getName());
         try {
 
@@ -175,6 +175,9 @@ public class FingerprintHelper {
 
                 if(scode!=null){
                     mFragment.setSecretCode(scode);
+                }
+                if(message!=null){
+                    mFragment.setMessage(message);
                 }
 
                 mFragment.show(context.getFragmentManager(), DIALOG_FRAGMENT_TAG);

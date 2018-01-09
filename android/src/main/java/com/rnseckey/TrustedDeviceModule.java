@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
 
     public TrustedDeviceModule(ReactApplicationContext reactContext){
         super(reactContext);
+
     }
 
     @Override
@@ -58,8 +60,8 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
-    public void getSignature(String nonce, final Callback c){
-        new FingerprintHelper(getReactApplicationContext()).authenticate(nonce, getCurrentActivity(), new FingerprintAuthenticationDialogFragment.FingerprintListener(){
+    public void getSignature(String nonce,String message, final Callback c){
+        new FingerprintHelper(getReactApplicationContext()).authenticate(nonce, message, getCurrentActivity(), new FingerprintAuthenticationDialogFragment.FingerprintListener(){
             @Override
             public void onSuccess(String sign) {
                 c.invoke(null, sign);
@@ -78,12 +80,13 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
             }
         }, null);
     }
+
     @ReactMethod
     public void removeKeyPair(Callback c){}
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
     public void isFingerprintSupported(Callback c){
-        c.invoke(null, new FingerprintHelper(getReactApplicationContext()).hasFingerprintSupport());
+         c.invoke(null, new FingerprintHelper(getReactApplicationContext()).hasFingerprintSupport());
     }
     @ReactMethod
     public void isLockScreenEnabled(Callback c){
@@ -120,5 +123,25 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
     public void getDeviceVersion(Callback c){
         c.invoke(null, Build.VERSION.SDK_INT);
     };
+
+    @ReactMethod
+    public void getDeviceId(Callback c){
+        SharedPreferences sharedPref = getCurrentActivity().getPreferences(Context.MODE_PRIVATE);
+        c.invoke(sharedPref.getString("TrustedDeviceId", null));
+
+    };
+    @ReactMethod
+    public void saveDeviceId(String id, Callback c){
+        SharedPreferences sharedPref = getCurrentActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPref.edit().putString("TrustedDeviceId", id).commit();
+        c.invoke(true);
+    };
+    @ReactMethod
+    public void removeDeviceId(Callback c){
+        SharedPreferences sharedPref = getCurrentActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPref.edit().putString("TrustedDeviceId", null).commit();
+        c.invoke(true);
+    };
+
 
 }

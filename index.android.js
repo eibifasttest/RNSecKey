@@ -17,13 +17,21 @@ var RNSecKey = {
   },
   generateKey: (callback) => NativeRNSecKey.generateKey(callback),
   getPublicKey: (callback) => NativeRNSecKey.getPublicKey(callback),
-  getSignature: (nonce, callback) => NativeRNSecKey.getSignature(nonce, callback),
-  removeKeyPair: (callback) => NativeRNSecKey.removeKeyPair(callback),
+  getSignature: (nonce, message, callback) => {
+    if(typeof message === 'function'){
+      callback = message;
+      message = null;
+    }
+    NativeRNSecKey.getSignature(nonce, message, callback);
+  },  removeKeyPair: (callback) => NativeRNSecKey.removeKeyPair(callback),
   isFingerprintSupported: (callback) => NativeRNSecKey.isFingerprintSupported(callback),
   isLockScreenEnabled: (callback) => NativeRNSecKey.isLockScreenEnabled(callback),
   isEligibleForFingerprint: (callback) => NativeRNSecKey.isEligibleForFingerprint(callback),
   getDeviceName: (callback) => NativeRNSecKey.getDeviceName(callback),
   getDeviceVersion: (callback) => NativeRNSecKey.getDeviceVersion(callback),
+  getDeviceId: (callback) => NativeRNSecKey.getDeviceId(callback),
+  saveDeviceId: (deviceId, callback) => NativeRNSecKey.saveDeviceId(deviceId, callback),
+  removeDeviceId: (callback) => NativeRNSecKey.removeDeviceId(callback),
 
 };
 

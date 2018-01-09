@@ -88,9 +88,14 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     FingerprintListener successRunable;
     OnAuthenticatedListener onAuthenticatedListener;
     private String scode = null;
+    private String message = null;
 
     public void setSecretCode(String scode) {
         this.scode = scode;
+    }
+
+    public void setMessage(String message){
+        this.message = message;
     }
 
     /**
@@ -152,6 +157,11 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
 
 
         mFingerprintContent = v.findViewById(R.id.fingerprint_container);
+
+        if(this.message!=null){
+            TextView tv = (TextView) v.findViewById(R.id.fingerprint_description);
+            tv.setText(message);
+        }
         mVerifyTrusted = v.findViewById(R.id.tv_verify_trusted);
         mBackupContent = v.findViewById(R.id.backup_container);
 
