@@ -87,7 +87,11 @@
 }
 
 + (BOOL)isFingerprintSupported{
-  return [self canEvaluateLAPolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics LAError:LAErrorTouchIDNotEnrolled];
+  if (@available(iOS 11.0, *)) {
+    return [self canEvaluateLAPolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics LAError:LAErrorBiometryNotEnrolled];
+  } else {
+    return [self canEvaluateLAPolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics LAError:LAErrorTouchIDNotEnrolled];
+  }
 }
 
 + (BOOL)isFingerprintEnrolled{
