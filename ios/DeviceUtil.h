@@ -19,6 +19,6 @@
 + (NSString *)getDeviceName;
 + (NSString *)getDeviceVersion;
 + (BOOL)isRegisterDeviceToken;
-
++ (BOOL)isJailBroken;
 @end
 

@@ -126,36 +126,9 @@ RCT_EXPORT_METHOD(getDeviceId:(RCTResponseSenderBlock)callback){
   callback(@[[NSNull null], deviceId]);
 }
 
-//RCT_EXPORT_METHOD(getRegistrationData:(RCTResponseSenderBlock)callback){
-//  BOOL isFingerprintSupported = [DeviceUtil isFingerprintSupported];
-//  BOOL isLockScreenEnabled = [DeviceUtil isLockScreenEnabled];
-//  BOOL isFingerprintEnrolled = [DeviceUtil isFingerprintEnrolled];
-//  NSNumber *ret = [NSNumber numberWithBool:NO];
-//
-//  if(isFingerprintSupported && isLockScreenEnabled && isFingerprintEnrolled) {
-//    ret = [NSNumber numberWithBool:YES];
-//  }
-//
-//  if(ret){
-//    NSString* publicKey = [CryptoUtil getPublicKeyString];
-//
-//    if([publicKey length] == 0){
-//      NSError *error = (NSError *)[CryptoUtil generateKey];
-//      if(!error){
-//        publicKey = [CryptoUtil getPublicKeyString];
-//      }
-//    }
-//
-//    NSDictionary *registrationData = @{
-//                                       @"deviceName": [DeviceUtil getDeviceName],
-//                                       @"deviceType": @"ios",
-//                                       @"deviceVersion": [DeviceUtil getDeviceVersion],
-//                                       @"devicePublicKey": publicKey
-//                                       };
-//    callback(@[[NSNumber numberWithBool:ret], registrationData]);
-//  }
-//  callback(@[[NSNumber numberWithBool:ret], [NSNull null]]);
-//}
+RCT_EXPORT_METHOD(isRooted:(RCTResponseSenderBlock)callback){
+  callback(@[[NSNull null], [NSNumber numberWithBool:[DeviceUtil isJailBroken]]]);
+}
 
 @end
 

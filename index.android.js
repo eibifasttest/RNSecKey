@@ -32,6 +32,7 @@ var RNSecKey = {
   getDeviceId: (callback) => NativeRNSecKey.getDeviceId(callback),
   saveDeviceId: (deviceId, callback) => NativeRNSecKey.saveDeviceId(deviceId, callback),
   removeDeviceId: (callback) => NativeRNSecKey.removeDeviceId(callback),
+  isRooted: (callback) => NativeRNSecKey.isRooted(callback),
 
 };
 

@@ -36,6 +36,7 @@ var RNSecKey = {
   saveToKeychain: (password, account, identifier, callback) => NativeRNSecKey.saveToKeychain(password, account, identifier, callback),
   getFromKeychain: (account, identifier, callback) => NativeRNSecKey.getFromKeychain(account, identifier, callback),
   removeFromKeychain: (account, identifier, callback) => NativeRNSecKey.removeFromKeychain(account, identifier, callback),
+  isRooted: (callback) => NativeRNSecKey.isRooted(callback),
 
 };
 
