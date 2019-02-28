@@ -123,6 +123,9 @@ RCT_EXPORT_METHOD(removeDeviceId:(RCTResponseSenderBlock)callback){
 
 RCT_EXPORT_METHOD(getDeviceId:(RCTResponseSenderBlock)callback){
   NSString *deviceId = [KeyChainUtil getDeviceId];
+  if(deviceId == nil){
+    deviceId = @"";
+  }
   callback(@[[NSNull null], deviceId]);
 }
 
