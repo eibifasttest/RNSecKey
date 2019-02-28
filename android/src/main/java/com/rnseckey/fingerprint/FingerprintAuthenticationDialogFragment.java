@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -159,8 +160,17 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         mFingerprintContent = v.findViewById(R.id.fingerprint_container);
 
         if(this.message!=null){
-            TextView tv = (TextView) v.findViewById(R.id.fingerprint_description);
-            tv.setText(message);
+            if(message.toLowerCase().contains("<html>")){
+                TextView tv = (TextView) v.findViewById(R.id.fingerprint_description);
+                tv.setVisibility(View.GONE);
+                WebView wv = (WebView) v.findViewById(R.id.fingerprint_description_wv);
+                wv.loadDataWithBaseURL(null, message, "text/html", "utf-8", null);
+                wv.setVisibility(View.VISIBLE);
+
+            }else {
+                TextView tv = (TextView) v.findViewById(R.id.fingerprint_description);
+                tv.setText(message);
+            }
         }
         mVerifyTrusted = v.findViewById(R.id.tv_verify_trusted);
         mBackupContent = v.findViewById(R.id.backup_container);
