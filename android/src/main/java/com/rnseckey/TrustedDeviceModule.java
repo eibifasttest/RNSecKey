@@ -130,7 +130,7 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getDeviceId(Callback c){
         SharedPreferences sharedPref = getCurrentActivity().getPreferences(Context.MODE_PRIVATE);
-        c.invoke(sharedPref.getString("TrustedDeviceId", null));
+        c.invoke(null, sharedPref.getString("TrustedDeviceId", null));
 
     };
     @ReactMethod
