@@ -13,8 +13,9 @@
 + (SecKeyRef)getPrivateKey:(NSString *)message;
 + (NSData *) getPublicKeyBitsFromKey:(SecKeyRef)publicKey;
 + (NSString *)transformKey:(NSData *)publicKeyData;
-+ (OSStatus)removePrivateKey;
-+ (NSString *)getPublicKeyString;
-+ (NSString *)getSignature:(NSString *)nonce message:(NSString *)message error:(NSError **)nsError;
-+ (id)getPublicKey;
++ (OSStatus)removePrivateKey:(NSString *)keyTag;
++ removePrivateKey;
++ (NSString *)getPublicKey:(NSString *)keyTag;
++ (NSDictionary *)getPublicKeyMap;
++ (NSString *)getSignature:(NSString *)type :(NSString *)nonce message:(NSString *)message error:(NSError **)nsError;
 @end

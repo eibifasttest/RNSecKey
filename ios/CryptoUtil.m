@@ -29,6 +29,7 @@
   }
   
   NSDictionary *parameters;
+  NSDictionary *signParameters;
   
   NSError *gen_error = nil;
   
@@ -44,11 +45,31 @@
                        }
                    };
     
+    signParameters = @{
+                   (id)kSecAttrTokenID: (id)kSecAttrTokenIDSecureEnclave,
+                   (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
+                   (id)kSecAttrKeySizeInBits: @256,
+                   (id)kSecAttrLabel: PRIVATE_KEY_TAG,
+                   (id)kSecPrivateKeyAttrs: @{
+                       (id)kSecAttrAccessControl: (__bridge_transfer id)sacObject,
+                       (id)kSecAttrIsPermanent: @YES,
+                       }
+                   };
+    
   } else {
     parameters = @{
                    (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
                    (id)kSecAttrKeySizeInBits: @256,
-                   (id)kSecAttrLabel: PRIVATE_KEY_TAG,
+                   (id)kSecAttrLabel: SIGN_PRIVATE_KEY_TAG,
+                   (id)kSecPrivateKeyAttrs: @{
+                       (id)kSecAttrIsPermanent: @YES,
+                       }
+                   };
+    
+    signParameters = @{
+                   (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
+                   (id)kSecAttrKeySizeInBits: @256,
+                   (id)kSecAttrLabel: SIGN_PRIVATE_KEY_TAG,
                    (id)kSecPrivateKeyAttrs: @{
                        (id)kSecAttrIsPermanent: @YES,
                        }
@@ -60,13 +81,13 @@
   return gen_error;
 }
 
-+ (SecKeyRef)getPrivateKey:(NSString *)message{
++ (SecKeyRef)getPrivateKey:(NSString *)keyTag :(NSString *)message{
   
   NSDictionary *params = @{
                            (id)kSecClass: (id)kSecClassKey,
                            (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
                            (id)kSecAttrKeySizeInBits: @256,
-                           (id)kSecAttrLabel: PRIVATE_KEY_TAG,
+                           (id)kSecAttrLabel: keyTag,
                            (id)kSecReturnRef: @YES,
                            (id)kSecUseOperationPrompt: message
                            };
@@ -79,13 +100,13 @@
   return nil;
 }
 
-+ (OSStatus)removePrivateKey{
++ (OSStatus)removePrivateKey:(NSString *)keyTag {
   
   NSDictionary *params = @{
                            (id)kSecClass: (id)kSecClassKey,
                            (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
                            (id)kSecAttrKeySizeInBits: @256,
-                           (id)kSecAttrLabel: PRIVATE_KEY_TAG,
+                           (id)kSecAttrLabel: keyTag,
                            (id)kSecReturnRef: @YES
                            };
   SecKeyRef privateKey;
@@ -97,6 +118,11 @@
     return status;
   }
   return -1;
+}
+
++ removePrivateKey {
+  [self removePrivateKey: PRIVATE_KEY_TAG];
+  [self removePrivateKey: SIGN_PRIVATE_KEY_TAG];
 }
 
 + (NSData *) getPublicKeyBitsFromKey:(SecKeyRef)publicKey{
@@ -144,31 +170,36 @@
   return keyInBase64;
 }
 
-+ (NSString *)getPublicKeyString{
-  NSString* publicKeyString = @"";
-  SecKeyRef privateKey = [self getPrivateKey:@""];
-  
-  if(privateKey != nil){
-    id publicKey = (CFBridgingRelease(SecKeyCopyPublicKey(privateKey)));
-    NSData *publicKeyData = [self getPublicKeyBitsFromKey:(__bridge SecKeyRef)publicKey];
-    publicKeyString = [self transformKey:publicKeyData];
++ (NSString *)getPublicKey:(NSString *)keyTag {
+  SecKeyRef privateKey = [self getPrivateKey:keyTag:@""];
+  if (privateKey == nil) {
+    return @"";
   }
-  return publicKeyString;
+  id publicKey = (CFBridgingRelease(SecKeyCopyPublicKey(privateKey)));
+  NSData *publicKeyData = [self getPublicKeyBitsFromKey:(__bridge SecKeyRef)publicKey];
+  return [self transformKey:publicKeyData];
 }
 
-+ (id)getPublicKey{
-  SecKeyRef privateKey = [self getPrivateKey:@""];
-  
-  if(privateKey != nil){
-    id publicKey = CFBridgingRelease(SecKeyCopyPublicKey(privateKey));
-    return publicKey;
-  }
-  return nil;
++ (NSDictionary *)getPublicKeyMap{
+  NSString* publicKey = [self getPublicKey:PRIVATE_KEY_TAG];
+  NSString* signPublicKey = [self getPublicKey:SIGN_PRIVATE_KEY_TAG];
+  return @{
+           @"key": publicKey,
+           @"signKey": signPublicKey,
+           };
 }
 
-+ (NSString *)getSignature:(NSString *)nonce message:(NSString *)message error:(NSError **)nsError{
++ (NSString *)getSignature:(NSString *)type :(NSString *)nonce message:(NSString *)message error:(NSError **)nsError{
   NSData *toBeSignedData = [nonce dataUsingEncoding:NSUTF8StringEncoding];
-  SecKeyRef privateKey = [self getPrivateKey:message];
+  
+  NSString* keyTag = @"";
+  if ([type isEqualToString:SIGNING]) {
+    keyTag = SIGN_PRIVATE_KEY_TAG;
+  } else if ([type isEqualToString:AUTHENTICATE]) {
+    keyTag = PRIVATE_KEY_TAG;
+  }
+  
+  SecKeyRef privateKey = [self getPrivateKey:keyTag:message];
   NSString *signedNounce = @"";
   if(privateKey != nil){
     NSError *error;

@@ -17,13 +17,13 @@ RCT_EXPORT_METHOD(generateKey:(RCTResponseSenderBlock)callback){
 }
 
 RCT_EXPORT_METHOD(getPublicKey:(RCTResponseSenderBlock)callback){
-  NSString *publicKeyString = [CryptoUtil getPublicKeyString];
-  callback(@[[NSNull null], publicKeyString]);
+  NSDictionary *publicKeyMap = [CryptoUtil getPublicKeyMap];
+  callback(@[[NSNull null], publicKeyMap]);
 }
 
-RCT_EXPORT_METHOD(getSignature:(NSString *)nonce message:(NSString *) message callback:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(getSignature:(NSString *)type :(NSString *)nonce message:(NSString *) message callback:(RCTResponseSenderBlock)callback){
   NSError *error;
-  NSString *signature = [CryptoUtil getSignature:nonce message:message error:&error];
+  NSString *signature = [CryptoUtil getSignature:type :nonce message:message error:&error];
   
   if(error != nil){
     callback(@[[NSNumber numberWithInteger:[error code]], signature]);
@@ -33,12 +33,7 @@ RCT_EXPORT_METHOD(getSignature:(NSString *)nonce message:(NSString *) message ca
 }
 
 RCT_EXPORT_METHOD(removeKeyPair:(RCTResponseSenderBlock)callback){
-  OSStatus status = [CryptoUtil removePrivateKey];
-  
-  if(status != 0){
-    callback(@[[NSNumber numberWithInt:status], [NSNull null]]);
-    return;
-  }
+  [CryptoUtil removePrivateKey];
   callback(@[[NSNull null], [NSNull null]]);
 }
 

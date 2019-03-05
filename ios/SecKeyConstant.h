@@ -13,6 +13,12 @@
 extern NSString * const PUBLIC_KEY_TAG;
 extern NSString * const PRIVATE_KEY_TAG;
 
+extern NSString * const SIGN_PUBLIC_KEY_TAG;
+extern NSString * const SIGN_PRIVATE_KEY_TAG;
+
+extern NSString * const AUTHENTICATE;
+extern NSString * const SIGNING;
+
 extern NSString * const BIOMETRIC_LOCKOUT;
 extern NSString * const BIOMETRIC_FAILED_CONSECUTIVE;
 extern NSString * const BIOMETRIC_DIFFERENT_STATE;

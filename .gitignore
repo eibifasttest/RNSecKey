@@ -1,2 +1,7 @@
 node_modules
 __tests__
+.project
+.settings
+*.xcuserstate
+project.xcworkspace
+xcuserdata
