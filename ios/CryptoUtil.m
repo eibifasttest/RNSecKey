@@ -120,7 +120,7 @@
   return -1;
 }
 
-+ removePrivateKey {
++ (void)removePrivateKey {
   [self removePrivateKey: PRIVATE_KEY_TAG];
   [self removePrivateKey: SIGN_PRIVATE_KEY_TAG];
 }
