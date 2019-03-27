@@ -50,21 +50,31 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void generateKey(Callback c){
         new FingerprintHelper(getReactApplicationContext()).clearKey();
-        PublicKey key = new FingerprintHelper(getReactApplicationContext()).createKeyPair();
-        String publicKeyString =  Base64.encodeToString(key.getEncoded(),Base64.DEFAULT);
-        c.invoke(null,publicKeyString);
+        PublicKey[] keys = new FingerprintHelper(getReactApplicationContext()).createKeyPair();
+        String publicKeyString =  Base64.encodeToString(keys[0].getEncoded(),Base64.DEFAULT);
+        String publicKeySignString =  Base64.encodeToString(keys[1].getEncoded(),Base64.DEFAULT);
+
+        c.invoke(null,publicKeyString, publicKeySignString);
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
     public void getPublicKey(Callback c){
-        PublicKey key = new FingerprintHelper(getReactApplicationContext()).createKeyPair();
-        String publicKeyString =  Base64.encodeToString(key.getEncoded(),Base64.DEFAULT);
-        c.invoke(null, publicKeyString);
+        PublicKey[] keys = new FingerprintHelper(getReactApplicationContext()).createKeyPair();
+        String publicKeyString =  Base64.encodeToString(keys[0].getEncoded(),Base64.DEFAULT);
+        String publicKeySignString =  Base64.encodeToString(keys[1].getEncoded(),Base64.DEFAULT);
+        JSONObject publicKeys = new JSONObject();
+        try {
+            publicKeys.put("key", publicKeyString);
+            publicKeys.put("signKey", publicKeySignString);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        c.invoke(null, publicKeys);
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
-    public void getSignature(String nonce,String message, final Callback c){
-        new FingerprintHelper(getReactApplicationContext()).authenticate(nonce, message, getCurrentActivity(), new FingerprintAuthenticationDialogFragment.FingerprintListener(){
+    public void getSignature(String type, String nonce,String message, final Callback c){
+        new FingerprintHelper(getReactApplicationContext()).authenticate(type, nonce, message, getCurrentActivity(), new FingerprintAuthenticationDialogFragment.FingerprintListener(){
             @Override
             public void onSuccess(String sign) {
                 c.invoke(null, sign);
