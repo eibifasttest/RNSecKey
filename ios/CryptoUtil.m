@@ -77,6 +77,7 @@
   }
   
   CFBridgingRelease(SecKeyCreateRandomKey((__bridge CFDictionaryRef)parameters, (void *)&gen_error));
+  CFBridgingRelease(SecKeyCreateRandomKey((__bridge CFDictionaryRef)signParameters, (void *)&gen_error));
   
   return gen_error;
 }
