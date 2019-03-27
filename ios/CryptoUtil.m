@@ -49,7 +49,7 @@
                    (id)kSecAttrTokenID: (id)kSecAttrTokenIDSecureEnclave,
                    (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
                    (id)kSecAttrKeySizeInBits: @256,
-                   (id)kSecAttrLabel: PRIVATE_KEY_TAG,
+                   (id)kSecAttrLabel: SIGN_PRIVATE_KEY_TAG,
                    (id)kSecPrivateKeyAttrs: @{
                        (id)kSecAttrAccessControl: (__bridge_transfer id)sacObject,
                        (id)kSecAttrIsPermanent: @YES,
@@ -60,7 +60,7 @@
     parameters = @{
                    (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
                    (id)kSecAttrKeySizeInBits: @256,
-                   (id)kSecAttrLabel: SIGN_PRIVATE_KEY_TAG,
+                   (id)kSecAttrLabel: PRIVATE_KEY_TAG,
                    (id)kSecPrivateKeyAttrs: @{
                        (id)kSecAttrIsPermanent: @YES,
                        }
