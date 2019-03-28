@@ -159,7 +159,7 @@ public class FingerprintHelper {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return null;
+        return keys;
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void authenticate(String type, String nonce, String message, Activity context, final FingerprintAuthenticationDialogFragment.FingerprintListener callable, String scode){
