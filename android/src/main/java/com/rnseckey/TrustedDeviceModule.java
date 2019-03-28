@@ -21,6 +21,8 @@ import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.rnseckey.fingerprint.FingerprintAuthenticationDialogFragment;
 import com.rnseckey.fingerprint.FingerprintHelper;
@@ -62,14 +64,10 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
         PublicKey[] keys = new FingerprintHelper(getReactApplicationContext()).createKeyPair();
         String publicKeyString =  Base64.encodeToString(keys[0].getEncoded(),Base64.DEFAULT);
         String publicKeySignString =  Base64.encodeToString(keys[1].getEncoded(),Base64.DEFAULT);
-        JSONObject publicKeys = new JSONObject();
-        try {
-            publicKeys.put("key", publicKeyString);
-            publicKeys.put("signKey", publicKeySignString);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        c.invoke(null, publicKeys);
+        WritableMap resultData = new WritableNativeMap();
+        resultData.putString("key", publicKeyString);
+        resultData.putString("signKey", publicKeySignString);
+        c.invoke(null, resultData);
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
