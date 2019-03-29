@@ -17,12 +17,12 @@ var RNSecKey = {
   },
   generateKey: (callback) => NativeRNSecKey.generateKey(callback),
   getPublicKey: (callback) => NativeRNSecKey.getPublicKey(callback),
-  getSignature: (nonce, message, callback) => {
+  getSignature: (type, nonce, message, callback) => {
     if(typeof message === 'function'){
       callback = message;
       message = null;
     }
-    NativeRNSecKey.getSignature(nonce, message, callback);
+    NativeRNSecKey.getSignature(type, nonce, message, callback);
   },  removeKeyPair: (callback) => NativeRNSecKey.removeKeyPair(callback),
   isFingerprintSupported: (callback) => NativeRNSecKey.isFingerprintSupported(callback),
   isLockScreenEnabled: (callback) => NativeRNSecKey.isLockScreenEnabled(callback),
