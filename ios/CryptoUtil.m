@@ -15,6 +15,8 @@
 + (NSObject *)generateKey{
   CFErrorRef error = NULL;
   SecAccessControlRef sacObject;
+  SecAccessControlRef sacObjectSign;
+
   
   [self removePrivateKey];
   
@@ -22,8 +24,14 @@
     sacObject = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                                 kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
                                                 kSecAccessControlTouchIDCurrentSet | kSecAccessControlPrivateKeyUsage, &error);
+    sacObjectSign = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
+                                                kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
+                                                kSecAccessControlTouchIDCurrentSet | kSecAccessControlPrivateKeyUsage, &error);
   } else {
     sacObject = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
+                                                kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
+                                                kSecAccessControlPrivateKeyUsage, &error);
+    sacObjectSign = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                                 kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
                                                 kSecAccessControlPrivateKeyUsage, &error);
   }
@@ -51,7 +59,7 @@
                    (id)kSecAttrKeySizeInBits: @256,
                    (id)kSecAttrLabel: SIGN_PRIVATE_KEY_TAG,
                    (id)kSecPrivateKeyAttrs: @{
-                       (id)kSecAttrAccessControl: (__bridge_transfer id)sacObject,
+                       (id)kSecAttrAccessControl: (__bridge_transfer id)sacObjectSign,
                        (id)kSecAttrIsPermanent: @YES,
                        }
                    };
