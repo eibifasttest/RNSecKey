@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RNSecKey</string>
     <string name="cancel">Cancel</string>
-    <string name="sign_in">Authorize</string>
+    <string name="sign_in">Authorise</string>
     <string name="ok">Ok</string>
     <string name="fingerprint_block">Too many failed attempts, please request for a new verification code from the website after 30 secs and retry again. You may also switch to SMS OTP or OneyKey OTP to access your account.</string>
     <string name="fingerprint_description">Please authenticate with your fingerprint to continue</string>
