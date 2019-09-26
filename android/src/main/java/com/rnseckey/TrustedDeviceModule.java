@@ -4,36 +4,26 @@ package com.rnseckey;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.telecom.Call;
 import android.util.Base64;
 
-import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Callback;
-import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.rnseckey.fingerprint.FingerprintAuthenticationDialogFragment;
 import com.rnseckey.fingerprint.FingerprintHelper;
 
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.security.PublicKey;
-import java.util.HashMap;
+
 
 
 public class TrustedDeviceModule extends ReactContextBaseJavaModule {
@@ -137,19 +127,49 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getDeviceId(Callback c){
-        SharedPreferences sharedPref = getCurrentActivity().getPreferences(Context.MODE_PRIVATE);
+        Activity activity = getCurrentActivity();
+        if(activity==null){
+            c.invoke("ERROR", null);
+            return;
+        }
+        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+        if(sharedPref==null){
+            c.invoke("ERROR", null);
+            return;
+        }
         c.invoke(null, sharedPref.getString("TrustedDeviceId", null));
 
+
+
     };
+
     @ReactMethod
     public void saveDeviceId(String id, Callback c){
-        SharedPreferences sharedPref = getCurrentActivity().getPreferences(Context.MODE_PRIVATE);
+        Activity activity = getCurrentActivity();
+        if(activity==null){
+            c.invoke("ERROR", null);
+            return;
+        }
+        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+        if(sharedPref==null){
+            c.invoke("ERROR", null);
+            return;
+        }
         sharedPref.edit().putString("TrustedDeviceId", id).commit();
         c.invoke(true);
     };
     @ReactMethod
     public void removeDeviceId(Callback c){
-        SharedPreferences sharedPref = getCurrentActivity().getPreferences(Context.MODE_PRIVATE);
+        Activity activity = getCurrentActivity();
+        if(activity==null){
+            c.invoke("ERROR", null);
+            return;
+        }
+        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+        if(sharedPref==null){
+            c.invoke("ERROR", null);
+            return;
+        }
         sharedPref.edit().putString("TrustedDeviceId", null).commit();
         c.invoke(true);
     };
