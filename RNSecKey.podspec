@@ -12,6 +12,8 @@ Pod::Spec.new do |s|
   s.homepage       = "http://192.168.0.92:8008/app-git/Repository/RNSecKey"
   s.source         = { :git => "http://192.168.0.92:8008/app-git/RNSecKey.git" }
   s.source_files   = 'ios/*.{h,m,swift}'
+
+  s.dependency "React"
   # s.preserve_paths = "**/*.js"
 
 end
