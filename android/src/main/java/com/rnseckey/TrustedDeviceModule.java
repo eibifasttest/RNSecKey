@@ -77,6 +77,8 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
 
                 }else if(code == -11){
                     c.invoke(-11, "User cancel");
+                }else if(code == -12){
+                    c.invoke(-12, "Key user not authenticated");
                 }
             }
         }, null);
