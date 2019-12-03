@@ -353,7 +353,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
                 } catch (SignatureException e) {
                     if(e.getMessage() != null && e.getMessage().contains("Key user not authenticated")) {
                         // handle as if were KeyPermanentlyInvalidatedException
-                        successRunable.onFail(-10);
+                        successRunable.onFail(-12);
                          dismiss();
                     } else{
                         throw new RuntimeException(e);
