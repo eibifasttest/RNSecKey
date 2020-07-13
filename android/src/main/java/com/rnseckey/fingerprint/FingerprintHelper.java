@@ -201,10 +201,7 @@ public class FingerprintHelper {
                 // enrolled. Thus show the dialog to authenticate with their password first
                 // and ask the user if they want to authenticate with fingerprints in the
                 // future
-                mFragment.setSuccessRunable(callable);
-                mFragment.setStage(
-                        FingerprintAuthenticationDialogFragment.Stage.NEW_FINGERPRINT_ENROLLED);
-                mFragment.show(context.getFragmentManager(), DIALOG_FRAGMENT_TAG);
+                callable.onFail(-10);
             }
 
         }catch (UserNotAuthenticatedException e){
