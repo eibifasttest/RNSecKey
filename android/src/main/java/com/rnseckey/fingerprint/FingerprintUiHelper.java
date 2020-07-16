@@ -72,11 +72,17 @@ public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallba
     }
 
     public boolean isFingerprintAuthAvailable() {
+        if (mFingerprintManager == null) {
+            return false;
+        }
         return mFingerprintManager.isHardwareDetected()
                 && mFingerprintManager.hasEnrolledFingerprints();
     }
 
     public boolean isFingerprintDetected() {
+        if (mFingerprintManager == null) {
+            return false;
+        }
         return mFingerprintManager.isHardwareDetected();
     }
 
