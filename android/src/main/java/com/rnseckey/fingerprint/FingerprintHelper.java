@@ -71,6 +71,9 @@ public class FingerprintHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean hasEnrolledFingerprints(){
+        if (mFingerprintManager == null) {
+            return false;
+        }
        return mFingerprintManager.hasEnrolledFingerprints();
     }
 
