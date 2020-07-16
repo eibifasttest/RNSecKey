@@ -112,7 +112,7 @@ public class FingerprintHelper {
 
     }
     private KeyPair createNewKey(String tag) throws InvalidAlgorithmParameterException{
-        boolean requireUserAuthentication = !(mFingerprintManager == null || !mFingerprintManager.isHardwareDetected());
+        boolean requireUserAuthentication = mFingerprintManager != null && mFingerprintManager.isHardwareDetected();
         mKeyPairGenerator.initialize(
             new KeyGenParameterSpec.Builder(tag,
                 KeyProperties.PURPOSE_SIGN)
