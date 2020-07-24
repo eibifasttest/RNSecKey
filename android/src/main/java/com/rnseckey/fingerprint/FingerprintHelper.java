@@ -71,11 +71,17 @@ public class FingerprintHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean hasEnrolledFingerprints(){
+        if (mFingerprintManager == null) {
+            return false;
+        }
        return mFingerprintManager.hasEnrolledFingerprints();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean hasFingerprintSupport(){
+        if (mFingerprintManager == null) {
+            return false;
+        }
         return mFingerprintManager.isHardwareDetected();
     }
 
@@ -106,27 +112,16 @@ public class FingerprintHelper {
 
     }
     private KeyPair createNewKey(String tag) throws InvalidAlgorithmParameterException{
-        if(mFingerprintManager.isHardwareDetected()){
-            mKeyPairGenerator.initialize(
-                    new KeyGenParameterSpec.Builder(tag,
-                            KeyProperties.PURPOSE_SIGN)
-                            .setDigests(KeyProperties.DIGEST_SHA256)
-                            .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
-                            // Require the user to authenticate with a fingerprint to authorize
-                            // every use of the private key
-                            .setUserAuthenticationRequired(true)
-                            .build());
-        }else{
-            mKeyPairGenerator.initialize(
-                    new KeyGenParameterSpec.Builder(tag,
-                            KeyProperties.PURPOSE_SIGN)
-                            .setDigests(KeyProperties.DIGEST_SHA256)
-                            .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
-                            // Require the user to authenticate with a fingerprint to authorize
-                            // every use of the private key
-                            .setUserAuthenticationRequired(false)
-                            .build());
-        }
+        boolean requireUserAuthentication = mFingerprintManager != null && mFingerprintManager.isHardwareDetected();
+        mKeyPairGenerator.initialize(
+            new KeyGenParameterSpec.Builder(tag,
+                KeyProperties.PURPOSE_SIGN)
+                        .setDigests(KeyProperties.DIGEST_SHA256)
+                        .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
+                        // Require the user to authenticate with a fingerprint to authorize
+                        // every use of the private key
+                        .setUserAuthenticationRequired(requireUserAuthentication)
+                        .build());
         return mKeyPairGenerator.generateKeyPair();
     }
     public void clearKey(){
