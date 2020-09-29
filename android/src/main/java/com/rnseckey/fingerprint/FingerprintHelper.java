@@ -11,16 +11,12 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.security.keystore.UserNotAuthenticatedException;
-import android.support.annotation.BoolRes;
 import android.support.annotation.RequiresApi;
-import android.util.Base64;
-import android.util.Log;
 
 import com.rnseckey.R;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
@@ -30,18 +26,14 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.UnrecoverableEntryException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.ECGenParameterSpec;
-import java.util.concurrent.Callable;
-
-import static android.R.attr.key;
-import static android.R.attr.numbersBackgroundColor;
 
 /**
  * Created by woonchee.tang on 16/01/2017.
  */
 
+@androidx.annotation.RequiresApi(api = Build.VERSION_CODES.M)
 public class FingerprintHelper {
     private static final String DIALOG_FRAGMENT_TAG = "myFragment";
 
@@ -217,6 +209,21 @@ public class FingerprintHelper {
                 }
             });
         }
+    }
+
+    public Signature getSignature(String type) {
+        try {
+            final String tag = "SIGNING".equalsIgnoreCase(type)? KEY_NAME_SIGN: KEY_NAME;
+            boolean status = initSignature(tag);
+
+            if (status) {
+                return mSignature;
+            }
+        } catch (UserNotAuthenticatedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
