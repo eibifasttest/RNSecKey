@@ -9,12 +9,15 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Base64;
 
+import androidx.biometric.BiometricPrompt;
+
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.rnseckey.biometricPrompt.BiometricPromptManager;
 import com.rnseckey.fingerprint.FingerprintAuthenticationDialogFragment;
 import com.rnseckey.fingerprint.FingerprintHelper;
 
@@ -61,27 +64,23 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
-    public void getSignature(String type, String nonce,String message, final Callback c){
-        new FingerprintHelper(getReactApplicationContext()).authenticate(type, nonce, message, getCurrentActivity(), new FingerprintAuthenticationDialogFragment.FingerprintListener(){
-            @Override
-            public void onSuccess(String sign) {
-                c.invoke(null, sign);
-            }
+    public void getSignature(final String type, final String nonce, final String message, final Callback c){
+        Activity activity = getCurrentActivity();
 
-            @Override
-            public void onFail(int code) {
-                if(code == -10){
-                    // fingerprint added or locked screen disabled
-                    c.invoke(-10, "fingerprint added or locked screen disabled");
-                    new FingerprintHelper(getReactApplicationContext()).clearKey();
-
-                }else if(code == -11){
-                    c.invoke(-11, "User cancel");
-                }else if(code == -12){
-                    c.invoke(-12, "Key user not authenticated");
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @androidx.annotation.RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void run() {
+                    BiometricPromptManager biometricPromptManager = new BiometricPromptManager(getCurrentActivity());
+                    BiometricPrompt.CryptoObject cryptoObject = biometricPromptManager.constructCryptoObject(type);
+                    BiometricPrompt.PromptInfo promptInfo = biometricPromptManager.constructPromptInfo(message);
+                    biometricPromptManager
+                            .getBiometricPrompt(nonce, c)
+                            .authenticate(promptInfo, cryptoObject);
                 }
-            }
-        }, null);
+            });
+        }
     }
 
     @ReactMethod
@@ -89,7 +88,7 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
     public void isFingerprintSupported(Callback c){
-         c.invoke(null, new FingerprintHelper(getReactApplicationContext()).hasFingerprintSupport());
+         c.invoke(null, new BiometricPromptManager(getCurrentActivity()).isFingerprintSupported());
     }
     @ReactMethod
     public void isLockScreenEnabled(Callback c){
@@ -115,7 +114,7 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
             c.invoke(null, false);
             return;
         }
-        c.invoke(null, new FingerprintHelper(getReactApplicationContext()).hasEnrolledFingerprints());
+        c.invoke(null, new BiometricPromptManager(getCurrentActivity()).isEligibleForFingerprint());
 
     };
     @ReactMethod
