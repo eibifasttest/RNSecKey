@@ -40,11 +40,11 @@ public class BiometricPromptManager {
         return new BiometricPrompt.CryptoObject(fingerprintHelper.getSignature(type));
     }
 
-    public BiometricPrompt.PromptInfo constructPromptInfo(String message) {
+    public BiometricPrompt.PromptInfo constructPromptInfo(String message, String desc) {
          return new BiometricPrompt.PromptInfo.Builder()
                  .setTitle("Biometric Verification.")
                  .setSubtitle(message)
-                 .setDescription("b2bds123jdn12")
+                 .setDescription(desc)
                  .setConfirmationRequired(false)
                  .setNegativeButtonText("Cancel")
                  .build();
