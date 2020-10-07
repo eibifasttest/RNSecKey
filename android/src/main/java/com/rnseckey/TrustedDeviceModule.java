@@ -68,9 +68,7 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
     public void getSignature(final String type, final String nonce, final String message, final Callback c){
         Activity activity = getCurrentActivity();
 
-        Log.e("message", message);
-        String[] messageArray = message.split("|");
-        Log.e("messageArray", messageArray[0]);
+        String[] messageArray = message.split("\\|");
         final String subtitle = messageArray[0];
         final String desc = messageArray.length > 1 ? messageArray[1] : null;
 
