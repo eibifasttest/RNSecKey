@@ -64,8 +64,13 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
-    public void getSignature(final String type, final String nonce, final String message, final String desc, final Callback c){
+    public void getSignature(final String type, final String nonce, final String message, final Callback c){
         Activity activity = getCurrentActivity();
+
+        String[] messageArray = message.split("|");
+        final String subtitle = messageArray[0];
+        final String desc = messageArray.length > 1 ? messageArray[1] : null;
+
 
         if (activity != null) {
             activity.runOnUiThread(new Runnable() {
@@ -74,7 +79,7 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
                 public void run() {
                     BiometricPromptManager biometricPromptManager = new BiometricPromptManager(getCurrentActivity());
                     BiometricPrompt.CryptoObject cryptoObject = biometricPromptManager.constructCryptoObject(type);
-                    BiometricPrompt.PromptInfo promptInfo = biometricPromptManager.constructPromptInfo(message, desc);
+                    BiometricPrompt.PromptInfo promptInfo = biometricPromptManager.constructPromptInfo(subtitle, desc);
                     biometricPromptManager
                             .getBiometricPrompt(nonce, c)
                             .authenticate(promptInfo, cryptoObject);
