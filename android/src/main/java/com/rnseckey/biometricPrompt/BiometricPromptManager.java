@@ -44,6 +44,7 @@ public class BiometricPromptManager {
          return new BiometricPrompt.PromptInfo.Builder()
                  .setTitle("Biometric Verification.")
                  .setSubtitle(message)
+                 .setDescription("b2bds123jdn12")
                  .setConfirmationRequired(false)
                  .setNegativeButtonText("Cancel")
                  .build();
