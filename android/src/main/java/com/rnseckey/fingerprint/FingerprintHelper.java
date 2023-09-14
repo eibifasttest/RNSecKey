@@ -130,6 +130,9 @@ public class FingerprintHelper {
         try {
             mKeyStore.load(null);
             KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry) mKeyStore.getEntry(KEY_NAME, null);
+            if (entry == null) {
+                return keys;
+            }
             keys[0] = entry.getCertificate().getPublicKey();
             entry = (KeyStore.PrivateKeyEntry) mKeyStore.getEntry(KEY_NAME_SIGN, null);
             keys[1] = entry.getCertificate().getPublicKey();
