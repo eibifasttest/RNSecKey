@@ -37,6 +37,8 @@ public class BiometricPromptManager {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public BiometricPrompt.CryptoObject constructCryptoObject(String type) {
         FingerprintHelper fingerprintHelper = new FingerprintHelper(context);
+        System.out.println("type: " + type);
+        System.out.println("signature: " + fingerprintHelper.getSignature(type).toString());
         return new BiometricPrompt.CryptoObject(fingerprintHelper.getSignature(type));
     }
 
