@@ -211,10 +211,12 @@ public class FingerprintHelper {
                     }
                 }
             });
+        } catch (KeyPermanentlyInvalidatedException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public Signature getSignature(String type) {
+    public Signature getSignature(String type) throws KeyPermanentlyInvalidatedException {
         try {
             final String tag = "SIGNING".equalsIgnoreCase(type)? KEY_NAME_SIGN: KEY_NAME;
             boolean status = initSignature(tag);
@@ -230,7 +232,7 @@ public class FingerprintHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private boolean initSignature(String tag) throws UserNotAuthenticatedException {
+    private boolean initSignature(String tag) throws UserNotAuthenticatedException, KeyPermanentlyInvalidatedException {
         try {
             mKeyStore.load(null);
             PrivateKey key = (PrivateKey) mKeyStore.getKey(tag, null);

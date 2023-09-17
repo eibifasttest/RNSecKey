@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
 import androidx.annotation.RequiresApi;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
@@ -37,9 +38,8 @@ public class BiometricPromptManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public BiometricPrompt.CryptoObject constructCryptoObject(String type) {
+    public BiometricPrompt.CryptoObject constructCryptoObject(String type) throws KeyPermanentlyInvalidatedException {
         FingerprintHelper fingerprintHelper = new FingerprintHelper(context);
-        Signature sig = fingerprintHelper.getSignature(type);
         return new BiometricPrompt.CryptoObject(fingerprintHelper.getSignature(type));
     }
 
