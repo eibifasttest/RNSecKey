@@ -15,8 +15,8 @@ var RNSecKey = {
   test: function() {
     NativeRNSecKey.test();
   },
-  generateKey: (tag, callback) => NativeRNSecKey.generateKey(callback),
-  getPublicKey: (callback) => NativeRNSecKey.getPublicKey(callback),
+  generateKey: (tag, callback) => NativeRNSecKey.generateKey(tag, callback),
+  getPublicKey: (tag, callback) => NativeRNSecKey.getPublicKey(tag, callback),
   getSignature: (tag, nonce, message, callback) => {
     if(typeof message === 'function'){
       callback = message;
