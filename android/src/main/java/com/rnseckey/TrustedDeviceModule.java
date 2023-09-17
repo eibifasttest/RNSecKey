@@ -46,9 +46,9 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @ReactMethod
-    public void generateKey(Callback c){
+    public void generateKey(String tag, Callback c){
         new FingerprintHelper(getReactApplicationContext()).clearKey();
-        PublicKey[] keys = new FingerprintHelper(getReactApplicationContext()).createKeyPair();
+        PublicKey[] keys = new FingerprintHelper(getReactApplicationContext()).createKeyPair(tag);
         String publicKeyString =  Base64.encodeToString(keys[0].getEncoded(),Base64.DEFAULT);
         System.out.println("publicKeyString" + publicKeyString);
         String publicKeySignString =  Base64.encodeToString(keys[1].getEncoded(),Base64.DEFAULT);

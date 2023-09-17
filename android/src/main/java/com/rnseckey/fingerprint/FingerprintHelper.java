@@ -78,7 +78,7 @@ public class FingerprintHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public PublicKey[] createKeyPair() {
+    public PublicKey createKeyPair(String tag) {
         // The enrolling flow for fingerprint. This is where you ask the user to set up fingerprint
         // for your flow. Use of keys is necessary if you need to know if the set of
         // enrolled fingerprints has changed.
@@ -86,18 +86,15 @@ public class FingerprintHelper {
         try {
             // Set the alias of the entry in Android KeyStore where the key will appear
             // and the constrains (purposes) in the constructor of the Builder
-            PublicKey[] publicKeys = getExistingKey();
+            PublicKey publicKey = getExistingKey(tag);
 
-            if(publicKeys[0]!=null){
-                return publicKeys;
+            if(publicKey != null){
+                return publicKey;
             }
 
-            KeyPair key1 = createNewKey(KEY_NAME);
-            KeyPair key2 = createNewKey(KEY_NAME_SIGN);
+            KeyPair keyPair = createNewKey(tag);
 
-            publicKeys[0] = key1.getPublic();
-            publicKeys[1] = key2.getPublic();
-            return publicKeys;
+            return keyPair.getPublic();
         } catch (InvalidAlgorithmParameterException e) {
             throw new RuntimeException(e);
         }
@@ -125,17 +122,15 @@ public class FingerprintHelper {
         }
     }
 
-    private PublicKey[] getExistingKey(){
-        PublicKey[] keys = new PublicKey[2];
+    private PublicKey getExistingKey(String tag){
         try {
             mKeyStore.load(null);
-            KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry) mKeyStore.getEntry(KEY_NAME, null);
+            KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry) mKeyStore.getEntry(tag, null);
             if (entry == null) {
-                return keys;
+                return null;
             }
-            keys[0] = entry.getCertificate().getPublicKey();
-            entry = (KeyStore.PrivateKeyEntry) mKeyStore.getEntry(KEY_NAME_SIGN, null);
-            keys[1] = entry.getCertificate().getPublicKey();
+            PublicKey key = entry.getCertificate().getPublicKey();
+            return key;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnrecoverableEntryException e) {
@@ -149,7 +144,7 @@ public class FingerprintHelper {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return keys;
+        return null;
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void authenticate(String type, String nonce, String message, Activity context, final FingerprintAuthenticationDialogFragment.FingerprintListener callable, String scode){
@@ -216,9 +211,9 @@ public class FingerprintHelper {
         }
     }
 
-    public Signature getSignature(String type) throws KeyPermanentlyInvalidatedException {
+    public Signature getSignature(String tag) throws KeyPermanentlyInvalidatedException {
         try {
-            final String tag = "SIGNING".equalsIgnoreCase(type)? KEY_NAME_SIGN: KEY_NAME;
+//            final String tag = "SIGNING".equalsIgnoreCase(type)? KEY_NAME_SIGN: KEY_NAME;
             boolean status = initSignature(tag);
 
             if (status) {
