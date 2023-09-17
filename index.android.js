@@ -15,14 +15,14 @@ var RNSecKey = {
   test: function() {
     NativeRNSecKey.test();
   },
-  generateKey: (callback) => NativeRNSecKey.generateKey(callback),
+  generateKey: (tag, callback) => NativeRNSecKey.generateKey(callback),
   getPublicKey: (callback) => NativeRNSecKey.getPublicKey(callback),
-  getSignature: (type, nonce, message, callback) => {
+  getSignature: (tag, nonce, message, callback) => {
     if(typeof message === 'function'){
       callback = message;
       message = null;
     }
-    NativeRNSecKey.getSignature(type, nonce, message, callback);
+    NativeRNSecKey.getSignature(tag, nonce, message, callback);
   },  removeKeyPair: (callback) => NativeRNSecKey.removeKeyPair(callback),
   isFingerprintSupported: (callback) => NativeRNSecKey.isFingerprintSupported(callback),
   isLockScreenEnabled: (callback) => NativeRNSecKey.isLockScreenEnabled(callback),
