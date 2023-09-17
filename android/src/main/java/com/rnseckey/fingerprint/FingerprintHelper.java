@@ -240,7 +240,7 @@ public class FingerprintHelper {
             throw e;
         }
         catch (KeyPermanentlyInvalidatedException e) {
-            return false;
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to init Cipher", e);
         }

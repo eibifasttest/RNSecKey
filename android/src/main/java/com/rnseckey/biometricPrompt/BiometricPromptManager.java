@@ -11,6 +11,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import com.facebook.react.bridge.Callback;
 import com.rnseckey.fingerprint.FingerprintHelper;
+import java.security.Signature;
+
 
 public class BiometricPromptManager {
 
@@ -37,8 +39,7 @@ public class BiometricPromptManager {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public BiometricPrompt.CryptoObject constructCryptoObject(String type) {
         FingerprintHelper fingerprintHelper = new FingerprintHelper(context);
-        System.out.println("type: " + type);
-        System.out.println("signature: " + fingerprintHelper.getSignature(type).toString());
+        Signature sig = fingerprintHelper.getSignature(type);
         return new BiometricPrompt.CryptoObject(fingerprintHelper.getSignature(type));
     }
 

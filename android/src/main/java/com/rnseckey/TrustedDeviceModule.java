@@ -9,6 +9,8 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Base64;
 import android.util.Log;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+
 
 import androidx.biometric.BiometricPrompt;
 
@@ -81,12 +83,17 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
                 @androidx.annotation.RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void run() {
-                    BiometricPromptManager biometricPromptManager = new BiometricPromptManager(getCurrentActivity());
-                    BiometricPrompt.CryptoObject cryptoObject = biometricPromptManager.constructCryptoObject(type);
-                    BiometricPrompt.PromptInfo promptInfo = biometricPromptManager.constructPromptInfo(subtitle, desc);
-                    biometricPromptManager
-                            .getBiometricPrompt(nonce, c)
-                            .authenticate(promptInfo, cryptoObject);
+                    try{
+                        BiometricPromptManager biometricPromptManager = new BiometricPromptManager(getCurrentActivity());
+                        BiometricPrompt.CryptoObject cryptoObject = biometricPromptManager.constructCryptoObject(type);
+                        BiometricPrompt.PromptInfo promptInfo = biometricPromptManager.constructPromptInfo(subtitle, desc);
+                        biometricPromptManager
+                                .getBiometricPrompt(nonce, c)
+                                .authenticate(promptInfo, cryptoObject);
+                    } catch (KeyPermanentlyInvalidatedException e) {
+                        c.invoke(e, false);
+                    }
+
                 }
             });
         }
