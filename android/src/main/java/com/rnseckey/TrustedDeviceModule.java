@@ -85,7 +85,7 @@ public class TrustedDeviceModule extends ReactContextBaseJavaModule {
                                 .getBiometricPrompt(nonce, c)
                                 .authenticate(promptInfo, cryptoObject);
                     } catch (KeyPermanentlyInvalidatedException e) {
-                        c.invoke("BiometricChanged", false);
+                        c.invoke("BIOMETRIC_DIFFERENT_STATE", false);
                     }
 
                 }

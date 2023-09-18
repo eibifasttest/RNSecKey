@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface CryptoUtil : NSObject
-+ (NSObject *)generateKey;
++ (NSObject *)generateKey:(NSString *)tag;
 + (SecKeyRef)getPrivateKey:(NSString *)message;
 + (NSData *) getPublicKeyBitsFromKey:(SecKeyRef)publicKey;
 + (NSString *)transformKey:(NSData *)publicKeyData;

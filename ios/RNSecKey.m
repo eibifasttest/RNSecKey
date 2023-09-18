@@ -13,7 +13,8 @@ RCT_EXPORT_METHOD(generateKey:(NSString *)tag :(RCTResponseSenderBlock)callback)
   if(error != nil){
     callback(@[[NSNumber numberWithInteger:[error code]], [error localizedDescription]]);
   }
-  callback(@[[NSNull null], [CryptoUtil getPublicKey:tag]);
+
+  callback(@[[NSNull null], [CryptoUtil getPublicKey:tag]]);
 }
 
 RCT_EXPORT_METHOD(getPublicKey:(RCTResponseSenderBlock)callback){

@@ -16,11 +16,11 @@
   CFErrorRef error = NULL;
   SecAccessControlRef sacObject;
 
-  NSString privateTag = [NSString stringWithFormat:@"%@/%@", tag, @"private"];
+  NSString *privateTag = [NSString stringWithFormat:@"%@/%@", tag, @"private"];
 
   
-  [self removePrivateKey];
-  
+  [self removePrivateKey:privateTag];
+
   if([DeviceUtil isFingerprintSupported]){
     sacObject = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                                 kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
@@ -30,11 +30,11 @@
                                                 kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
                                                 kSecAccessControlPrivateKeyUsage, &error);
   }
-  
+
   NSDictionary *parameters;
 
   NSError *gen_error = nil;
-  
+
   if([DeviceUtil supportSecureEnclave]){
     parameters = @{
                    (id)kSecAttrTokenID: (id)kSecAttrTokenIDSecureEnclave,
@@ -46,7 +46,7 @@
                        (id)kSecAttrIsPermanent: @YES,
                        }
                    };
-    
+
   } else {
     parameters = @{
                    (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
@@ -58,25 +58,27 @@
                    };
 
   }
-  
+
   CFBridgingRelease(SecKeyCreateRandomKey((__bridge CFDictionaryRef)parameters, (void *)&gen_error));
 
   return gen_error;
 }
 
 + (SecKeyRef)getPrivateKey:(NSString *)keyTag :(NSString *)message{
-  
+
+    NSString *privateTag = [NSString stringWithFormat:@"%@/%@", keyTag, @"private"];
+
   NSDictionary *params = @{
                            (id)kSecClass: (id)kSecClassKey,
                            (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
                            (id)kSecAttrKeySizeInBits: @256,
-                           (id)kSecAttrLabel: keyTag,
+                           (id)kSecAttrLabel: privateTag,
                            (id)kSecReturnRef: @YES,
                            (id)kSecUseOperationPrompt: message
                            };
   SecKeyRef privateKey;
   OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)params, (CFTypeRef *)&privateKey);
-  
+
   if (status == errSecSuccess) {
     return privateKey;
   }
@@ -84,7 +86,7 @@
 }
 
 + (OSStatus)removePrivateKey:(NSString *)keyTag {
-  
+
   NSDictionary *params = @{
                            (id)kSecClass: (id)kSecClassKey,
                            (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
@@ -94,7 +96,7 @@
                            };
   SecKeyRef privateKey;
   OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)params, (CFTypeRef *)&privateKey);
-  
+
   if (status == errSecSuccess) {
     status = SecItemDelete((__bridge CFDictionaryRef)params);
     NSLog(@"remove private key status is %d", (int)status);
@@ -111,15 +113,15 @@
 + (NSData *) getPublicKeyBitsFromKey:(SecKeyRef)publicKey{
   static const uint8_t publicKeyIdentifier[] = "com.RNPlugin.RNSecKey.cryptopublic";
   NSData *publicTag = [[NSData alloc] initWithBytes:publicKeyIdentifier length:sizeof(publicKeyIdentifier)];
-  
+
   OSStatus sanityCheck = noErr;
   NSData * publicKeyBits = nil;
-  
+
   NSMutableDictionary * queryPublicKey = [[NSMutableDictionary alloc] init];
   [queryPublicKey setObject:(__bridge id)kSecClassKey forKey:(__bridge id)kSecClass];
   [queryPublicKey setObject:publicTag forKey:(__bridge id)kSecAttrApplicationTag];
   [queryPublicKey setObject:(__bridge id)kSecAttrKeyTypeECSECPrimeRandom forKey:(__bridge id)kSecAttrKeyType];
-  
+
   // Temporarily add key to the Keychain, return as data:
   NSMutableDictionary * attributes = [queryPublicKey mutableCopy];
   [attributes setObject:(__bridge id)publicKey forKey:(__bridge id)kSecValueRef];
@@ -128,28 +130,28 @@
   sanityCheck = SecItemAdd((__bridge CFDictionaryRef) attributes, &result);
   if (sanityCheck == errSecSuccess) {
     publicKeyBits = CFBridgingRelease(result);
-    
+
     // Remove from Keychain again:
     (void)SecItemDelete((__bridge CFDictionaryRef) queryPublicKey);
   }
-  
+
   return publicKeyBits;
 }
 
 + (NSString *)transformKey:(NSData *)publicKeyData{
   static const unsigned char ecPublicKeyHeader[26] = {
-    
+
     /* Sequence of length 0xd made up of OID followed by NULL */
     0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01,
     0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x03, 0x01, 0x07, 0x03, 0x42, 0x00
   };
-  
+
   NSMutableData *data = [[NSMutableData alloc] initWithBytes:ecPublicKeyHeader length:26];
-  
+
   [data appendData:publicKeyData];
-  
+
   NSString *keyInBase64 = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-  
+
   return keyInBase64;
 }
 
