@@ -12,10 +12,11 @@
 
 @implementation CryptoUtil
 
-+ (NSObject *)generateKey{
++ (NSObject *)generateKey:(NSString *)tag{
   CFErrorRef error = NULL;
   SecAccessControlRef sacObject;
-  SecAccessControlRef sacObjectSign;
+
+  NSString privateTag = [NSString stringWithFormat:@"%@/%@", tag, @"private"];
 
   
   [self removePrivateKey];
@@ -24,21 +25,14 @@
     sacObject = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                                 kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
                                                 kSecAccessControlTouchIDCurrentSet | kSecAccessControlPrivateKeyUsage, &error);
-    sacObjectSign = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
-                                                kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-                                                kSecAccessControlTouchIDCurrentSet | kSecAccessControlPrivateKeyUsage, &error);
   } else {
     sacObject = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
-                                                kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-                                                kSecAccessControlPrivateKeyUsage, &error);
-    sacObjectSign = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                                 kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
                                                 kSecAccessControlPrivateKeyUsage, &error);
   }
   
   NSDictionary *parameters;
-  NSDictionary *signParameters;
-  
+
   NSError *gen_error = nil;
   
   if([DeviceUtil supportSecureEnclave]){
@@ -46,20 +40,9 @@
                    (id)kSecAttrTokenID: (id)kSecAttrTokenIDSecureEnclave,
                    (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
                    (id)kSecAttrKeySizeInBits: @256,
-                   (id)kSecAttrLabel: PRIVATE_KEY_TAG,
+                   (id)kSecAttrLabel: privateTag,
                    (id)kSecPrivateKeyAttrs: @{
                        (id)kSecAttrAccessControl: (__bridge_transfer id)sacObject,
-                       (id)kSecAttrIsPermanent: @YES,
-                       }
-                   };
-    
-    signParameters = @{
-                   (id)kSecAttrTokenID: (id)kSecAttrTokenIDSecureEnclave,
-                   (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
-                   (id)kSecAttrKeySizeInBits: @256,
-                   (id)kSecAttrLabel: SIGN_PRIVATE_KEY_TAG,
-                   (id)kSecPrivateKeyAttrs: @{
-                       (id)kSecAttrAccessControl: (__bridge_transfer id)sacObjectSign,
                        (id)kSecAttrIsPermanent: @YES,
                        }
                    };
@@ -68,25 +51,16 @@
     parameters = @{
                    (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
                    (id)kSecAttrKeySizeInBits: @256,
-                   (id)kSecAttrLabel: PRIVATE_KEY_TAG,
+                   (id)kSecAttrLabel: privateTag,
                    (id)kSecPrivateKeyAttrs: @{
                        (id)kSecAttrIsPermanent: @YES,
                        }
                    };
-    
-    signParameters = @{
-                   (id)kSecAttrKeyType: (id)kSecAttrKeyTypeECSECPrimeRandom,
-                   (id)kSecAttrKeySizeInBits: @256,
-                   (id)kSecAttrLabel: SIGN_PRIVATE_KEY_TAG,
-                   (id)kSecPrivateKeyAttrs: @{
-                       (id)kSecAttrIsPermanent: @YES,
-                       }
-                   };
+
   }
   
   CFBridgingRelease(SecKeyCreateRandomKey((__bridge CFDictionaryRef)parameters, (void *)&gen_error));
-  CFBridgingRelease(SecKeyCreateRandomKey((__bridge CFDictionaryRef)signParameters, (void *)&gen_error));
-  
+
   return gen_error;
 }
 
@@ -198,15 +172,8 @@
            };
 }
 
-+ (NSString *)getSignature:(NSString *)type :(NSString *)nonce message:(NSString *)message error:(NSError **)nsError{
++ (NSString *)getSignature:(NSString *)keyTag :(NSString *)nonce message:(NSString *)message error:(NSError **)nsError{
   NSData *toBeSignedData = [nonce dataUsingEncoding:NSUTF8StringEncoding];
-  
-  NSString* keyTag = @"";
-  if ([type isEqualToString:SIGNING]) {
-    keyTag = SIGN_PRIVATE_KEY_TAG;
-  } else if ([type isEqualToString:AUTHENTICATE]) {
-    keyTag = PRIVATE_KEY_TAG;
-  }
   
   SecKeyRef privateKey = [self getPrivateKey:keyTag:message];
   NSString *signedNounce = @"";

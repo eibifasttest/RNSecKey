@@ -7,13 +7,13 @@
 
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(generateKey:(RCTResponseSenderBlock)callback){
-  NSError *error = (NSError *)[CryptoUtil generateKey];
+RCT_EXPORT_METHOD(generateKey:(NSString *)tag :(RCTResponseSenderBlock)callback){
+  NSError *error = (NSError *)[CryptoUtil generateKey:tag];
   
   if(error != nil){
     callback(@[[NSNumber numberWithInteger:[error code]], [error localizedDescription]]);
   }
-  callback(@[[NSNull null], [NSNull null]]);
+  callback(@[[NSNull null], [CryptoUtil getPublicKey:tag]);
 }
 
 RCT_EXPORT_METHOD(getPublicKey:(RCTResponseSenderBlock)callback){
@@ -21,9 +21,9 @@ RCT_EXPORT_METHOD(getPublicKey:(RCTResponseSenderBlock)callback){
   callback(@[[NSNull null], publicKeyMap]);
 }
 
-RCT_EXPORT_METHOD(getSignature:(NSString *)type :(NSString *)nonce message:(NSString *) message callback:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(getSignature:(NSString *)keyTag :(NSString *)nonce message:(NSString *) message callback:(RCTResponseSenderBlock)callback){
   NSError *error;
-  NSString *signature = [CryptoUtil getSignature:type :nonce message:message error:&error];
+  NSString *signature = [CryptoUtil getSignature:keyTag :nonce message:message error:&error];
   
   if(error != nil){
     callback(@[[NSNumber numberWithInteger:[error code]], signature]);
