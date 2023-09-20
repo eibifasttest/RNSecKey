@@ -122,6 +122,15 @@ public class FingerprintHelper {
         }
     }
 
+    public void clearKey(String key){
+        try {
+            mKeyStore.load(null);
+            mKeyStore.deleteEntry(key);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     private PublicKey getExistingKey(String tag){
         try {
             mKeyStore.load(null);
