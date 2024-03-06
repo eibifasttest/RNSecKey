@@ -34,7 +34,7 @@ public class BiometricPromptManager {
 
     public boolean isEligibleForFingerprint() {
         int authenticateFlag = this.checkIfBiometricAvailable();
-        return (authenticateFlag == BiometricManager.BIOMETRIC_SUCCESS || authenticateFlag == BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED);
+        return (authenticateFlag == BiometricManager.BIOMETRIC_SUCCESS);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -58,13 +58,13 @@ public class BiometricPromptManager {
 
         int authenticateFlag = biometricManager.canAuthenticate();
 
-        switch (authenticateFlag) {
-            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                // Prompts the user to create credentials that your app accepts.
-                final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-                context.startActivity(enrollIntent);
-                break;
-        }
+//        switch (authenticateFlag) {
+//            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+//                // Prompts the user to create credentials that your app accepts.
+//                final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+//               context.startActivity(enrollIntent);
+//                break;
+//        }
         return authenticateFlag;
     }
 }
